@@ -1,10 +1,12 @@
-import Forms from "../../../components/pageComponents/Prisoners/NewPrisoners/Forms";
-
+import Forms from "../../../components/UI/Form/Forms";
+import Page from "../../../container/Page";
 const NewPrisoners = () => {
   return (
-    <div className="mx-20 mt-40">
-      <Forms />
-    </div>
+    <Page>
+      <div>
+        <Forms />
+      </div>
+    </Page>
   );
 };
 

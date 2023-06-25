@@ -1,5 +1,13 @@
-const index = () => {
-  return <div>index</div>;
+import Forms from "../../../components/UI/Form/Forms";
+import Page from "../../../container/Page";
+const NewPrisoners = () => {
+  return (
+    <Page>
+      <div>
+        <Forms />
+      </div>
+    </Page>
+  );
 };
 
-export default index;
+export default NewPrisoners;

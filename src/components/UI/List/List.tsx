@@ -1,19 +1,23 @@
 type Props = {
-  children: string;
+  children: string | JSX.Element | JSX.Element[];
   heading: string[];
 };
 
 const List = ({ children, heading }: Props) => {
   return (
-    <table>
+    <table className="w-full">
       <thead>
-        <tr>
+        <tr className="bg-slate-400">
           {heading.map((val, i) => {
-            return <td key={i}>{val}</td>;
+            return (
+              <td key={i} className="py-1.5">
+                {val}
+              </td>
+            );
           })}
         </tr>
       </thead>
-      <tbody>{children}</tbody>
+      <tbody className="divide-y divide-black">{children}</tbody>
     </table>
   );
 };
