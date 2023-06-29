@@ -1,89 +1,113 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 
-const fields = [
-  {
-    name: "pName",
-    type: "text",
-    label: "Prisoner's Name",
-  },
-  {
-    name: "pAge",
-    type: "number",
-    label: "Prisoner's Age",
-  },
-  {
-    name: "pCrime",
-    type: "text",
-    label: "Prisoner's Crime",
-  },
-  {
-    name: "pTotalSentence",
-    type: "number",
-    label: "Prisoner's Total Sentence",
-  },
-  {
-    name: "pRemainingSentence",
-    type: "number",
-    label: "Prisoner's Remaining Sentence",
-  },
-];
-
-const initialValues = {
-  pName: "",
-  pAge: 0,
-  pCrime: "",
-  pTotalSentence: 0,
-  pRemainingSentence: 0,
+type FieldOption = {
+	value: string;
+	label: string;
 };
 
-const schema = Yup.object().shape({
-  pName: Yup.string().required("Required"),
-  pAge: Yup.string().required("Required"),
-  pCrime: Yup.string().required("Required"),
-  pTotalSentence: Yup.string().required("Required"),
-  pRemainingSentence: Yup.string().required("Required"),
-});
+type FormField = {
+	name: string;
+	type: string;
+	label: string;
+	options?: FieldOption[];
+};
 
-const Forms = () => {
-  return (
-    <div className="relative">
-      <Formik
-        initialValues={initialValues}
-        validationSchema={schema}
-        onSubmit={(values) => console.log(values)}
-      >
-        <form>
-          {fields.map((field, index) => (
-            <div key={index} className="relative z-0 w-full mb-6 group">
-              <Field
-                type={field.type}
-                name={field.name}
-                id={`floating_${field.name}`}
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                required
-              />
-              <label
-                htmlFor={`floating_${field.name}`}
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                {field.label}
-              </label>
-              <ErrorMessage name={field.name} />
-            </div>
-          ))}
+type FormProps = {
+	initialValues: any;
+	schema: any;
+	fields: FormField[];
+};
 
-          <button
-            type="submit"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Submit
-          </button>
-        </form>
-      </Formik>
-    </div>
-  );
+const Forms = ({ initialValues, schema, fields }: FormProps) => {
+	return (
+		<div className="relative">
+			<Formik
+				initialValues={initialValues}
+				validationSchema={schema}
+				onSubmit={(values) => console.log(values)}
+			>
+				<Form className="flex flex-col gap-3">
+					{fields.map((field, index) => (
+						<div
+							className="grid grid-cols-12 items-center"
+							key={index}
+						>
+							<div className="col-span-4">
+								<label
+									htmlFor={field.name}
+									className="block text-sm font-medium text-gray-700"
+								>
+									{field.label}
+								</label>
+							</div>
+							<div className="col-span-8">
+								{field.type === 'text' && (
+									<Field
+										type={field.type}
+										name={field.name}
+										id={field.name}
+										className="block w-full px-5 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+									/>
+								)}
+
+								{field.type === 'number' && (
+									<Field
+										type={field.type}
+										name={field.name}
+										id={field.name}
+										className="block w-full px-5 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+									/>
+								)}
+
+								{field.type === 'date' && (
+									<Field
+										type={field.type}
+										name={field.name}
+										id={field.name}
+										className="block w-full px-5 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+									/>
+								)}
+
+								{field.type === 'select' && (
+									<Field
+										as={field.type}
+										name={field.name}
+										id={field.name}
+										defaultValue=""
+										className="block w-full px-5 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+									>
+										<option value="">--Select--</option>
+										{field.options?.map((option, index) => (
+											<option
+												key={index}
+												value={option.value}
+											>
+												{option.label}
+											</option>
+										))}
+									</Field>
+								)}
+								<ErrorMessage
+									name={field.name}
+									component="div"
+									className="text-red-500"
+								/>
+							</div>
+						</div>
+					))}
+
+					<div className="w-full flex justify-start">
+						<button
+							type="submit"
+							className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+						>
+							Submit
+						</button>
+					</div>
+				</Form>
+			</Formik>
+		</div>
+	);
 };
 
 export default Forms;
