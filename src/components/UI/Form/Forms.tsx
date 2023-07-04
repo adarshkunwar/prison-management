@@ -13,18 +13,34 @@ type FormField = {
 };
 
 type FormProps = {
-	initialValues: any;
+	initialValues: object;
 	schema: any;
 	fields: FormField[];
+	onSubmit: (values: object) => void;
 };
 
-const Forms = ({ initialValues, schema, fields }: FormProps) => {
+const style = {
+	error: 'text-red-500 text-sm',
+	border: 'border border-gray-500 rounded-md',
+	focus: 'focus:ring-blue-500 focus:border-blue-500',
+	text: 'text-sm text-gray-700',
+	default: 'block w-full px-5 py-2 shadow-sm rounded-md ',
+};
+
+const styleInput = {
+	default: `${style.default} ${style.border} ${style.focus} ${style.text}`,
+	label: `${style.text} font-medium`,
+};
+
+const Forms = ({ initialValues, schema, fields, onSubmit }: FormProps) => {
 	return (
 		<div className="relative">
 			<Formik
 				initialValues={initialValues}
 				validationSchema={schema}
-				onSubmit={(values) => console.log(values)}
+				onSubmit={(values) => {
+					onSubmit(values);
+				}}
 			>
 				<Form className="flex flex-col gap-3">
 					{fields.map((field, index) => (
@@ -35,7 +51,7 @@ const Forms = ({ initialValues, schema, fields }: FormProps) => {
 							<div className="col-span-4">
 								<label
 									htmlFor={field.name}
-									className="block text-sm font-medium text-gray-700"
+									className={styleInput.label}
 								>
 									{field.label}
 								</label>
@@ -46,7 +62,7 @@ const Forms = ({ initialValues, schema, fields }: FormProps) => {
 										type={field.type}
 										name={field.name}
 										id={field.name}
-										className="block w-full px-5 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+										className={styleInput.default}
 									/>
 								)}
 
@@ -55,7 +71,7 @@ const Forms = ({ initialValues, schema, fields }: FormProps) => {
 										type={field.type}
 										name={field.name}
 										id={field.name}
-										className="block w-full px-5 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+										className={styleInput.default}
 									/>
 								)}
 
@@ -64,7 +80,7 @@ const Forms = ({ initialValues, schema, fields }: FormProps) => {
 										type={field.type}
 										name={field.name}
 										id={field.name}
-										className="block w-full px-5 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+										className={styleInput.default}
 									/>
 								)}
 
@@ -74,7 +90,7 @@ const Forms = ({ initialValues, schema, fields }: FormProps) => {
 										name={field.name}
 										id={field.name}
 										defaultValue=""
-										className="block w-full px-5 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+										className={styleInput.default}
 									>
 										<option value="">--Select--</option>
 										{field.options?.map((option, index) => (
@@ -90,7 +106,7 @@ const Forms = ({ initialValues, schema, fields }: FormProps) => {
 								<ErrorMessage
 									name={field.name}
 									component="div"
-									className="text-red-500"
+									className={style.error}
 								/>
 							</div>
 						</div>

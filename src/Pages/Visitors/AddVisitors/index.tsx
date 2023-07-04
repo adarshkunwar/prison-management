@@ -5,35 +5,74 @@ import FormHead from '../../../components/UI/FormHead';
 
 const fields = [
 	{
+		name: 'visitorId',
+		label: 'Visitor ID',
+		type: 'number',
+	},
+	{
+		name: 'prisonerId',
+		label: 'Prisoner ID',
+		type: 'number',
+	},
+	{
 		name: 'name',
 		label: 'Name',
 		type: 'text',
 	},
 	{
-		name: 'class',
-		label: 'Class',
+		name: 'age',
+		label: 'Age',
 		type: 'number',
 	},
 	{
-		name: 'rollNo',
-		label: 'Roll No',
+		name: 'profession',
+		label: 'Profession',
+		type: 'text',
+	},
+	{
+		name: 'address',
+		label: 'Address',
+		type: 'text',
+	},
+	{
+		name: 'contact',
+		label: 'Contact',
 		type: 'number',
+	},
+	{
+		name: 'relation',
+		label: 'Relation',
+		type: 'text',
 	},
 ];
 
 const initialValues = {
+	visitorId: '',
+	prisonerId: '',
 	name: '',
-	class: '',
-	rollNo: '',
+	age: '',
+	profession: '',
+	address: '',
+	contact: '',
+	relation: '',
 };
 
 const schema = Yup.object().shape({
+	visitorId: Yup.number().required('Required'),
+	prisonerId: Yup.number().required('Required'),
 	name: Yup.string().required('Required'),
-	class: Yup.number().required('Required'),
-	rollNo: Yup.number().required('Required'),
+	age: Yup.number().required('Required'),
+	profession: Yup.string().required('Required'),
+	address: Yup.string().required('Required'),
+	contact: Yup.number().required('Required'),
+	relation: Yup.string().required('Required'),
 });
 
 const NewPrisoners = () => {
+	const handleSubmit = (data: object) => {
+		console.log(data);
+	};
+
 	return (
 		<Page>
 			<div>
@@ -42,6 +81,7 @@ const NewPrisoners = () => {
 					fields={fields}
 					initialValues={initialValues}
 					schema={schema}
+					onSubmit={handleSubmit}
 				/>
 			</div>
 		</Page>

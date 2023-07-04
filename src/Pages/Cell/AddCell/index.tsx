@@ -41,6 +41,10 @@ const schema = Yup.object().shape({
 });
 
 const index = () => {
+	const handleSubmit = (data: object) => {
+		console.log(data);
+	};
+
 	return (
 		<Page>
 			<div>
@@ -49,6 +53,7 @@ const index = () => {
 					fields={fields}
 					initialValues={initialValues}
 					schema={schema}
+					onSubmit={handleSubmit}
 				/>
 			</div>
 		</Page>

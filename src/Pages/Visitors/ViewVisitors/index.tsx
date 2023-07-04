@@ -6,23 +6,48 @@ import { BsPencilSquare, BsTrash } from 'react-icons/bs';
 
 const fields = [
 	{
+		visitorId: '1',
+		prisonerId: '1',
 		name: 'Alex',
-		class: '8',
-		rollNo: '4',
+		age: '20',
+		profession: 'Student',
+		address: 'Kathmandu',
+		contact: '9840000000',
+		relation: 'Brother',
 	},
 	{
+		visitorId: '2',
+		prisonerId: '2',
 		name: 'Alex',
-		class: '8',
-		rollNo: '4',
+		age: '20',
+		profession: 'Student',
+		address: 'Kathmandu',
+		contact: '9840000000',
+		relation: 'Brother',
 	},
 	{
+		visitorId: '3',
+		prisonerId: '3',
 		name: 'Alex',
-		class: '8',
-		rollNo: '4',
+		age: '20',
+		profession: 'Student',
+		address: 'Kathmandu',
+		contact: '9840000000',
+		relation: 'Brother',
 	},
 ];
 
-const heading = ['name', 'class', 'rollNo', 'Actions'];
+const heading = [
+	'Visitor ID',
+	'Prisoner ID',
+	'Name',
+	'Age',
+	'Profession',
+	'Address',
+	'Contact',
+	'Relation',
+	'Action',
+];
 
 const title = 'Visitors';
 
@@ -53,10 +78,17 @@ const index = () => {
 								scope="row"
 								className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
 							>
-								{val.name}
+								{val.visitorId}
 							</td>
-							<td className="px-6 py-4">{val.class}</td>
-							<td className="px-6 py-4">{val.rollNo}</td>
+
+							<td className="px-6 py-4">{val.prisonerId}</td>
+							<td className="px-6 py-4">{val.name}</td>
+							<td className="px-6 py-4">{val.age}</td>
+							<td className="px-6 py-4">{val.profession}</td>
+							<td className="px-6 py-4">{val.address}</td>
+							<td className="px-6 py-4">{val.contact}</td>
+							<td className="px-6 py-4">{val.relation}</td>
+
 							<td className="px-6 py-4">
 								<div className="flex items-center gap-2">
 									<div

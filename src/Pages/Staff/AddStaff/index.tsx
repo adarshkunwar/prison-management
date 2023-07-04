@@ -48,6 +48,10 @@ const schema = Yup.object().shape({
 });
 
 const NewPrisoners = () => {
+	const handleSubmit = (data: object) => {
+		console.log(data);
+	};
+
 	return (
 		<Page>
 			<div>
@@ -56,6 +60,7 @@ const NewPrisoners = () => {
 					fields={fields}
 					initialValues={initialValues}
 					schema={schema}
+					onSubmit={handleSubmit}
 				/>
 			</div>
 		</Page>
