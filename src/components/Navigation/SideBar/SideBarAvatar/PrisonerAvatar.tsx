@@ -1,12 +1,10 @@
-import React from "react";
-
 type Props = {
-  width: number;
-  height: number;
+	width: number;
+	height: number;
 };
 
 const PrisonerAvatar = ({ height, width }: Props) => {
-  const svgCode = `<?xml version="1.0" encoding="iso-8859-1"?>
+	const svgCode = `<?xml version="1.0" encoding="iso-8859-1"?>
     <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
     <svg fill="#000000" height="${height}px" width="${width}px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
         viewBox="0 0 507.9 507.9" xml:space="preserve">
@@ -33,7 +31,7 @@ const PrisonerAvatar = ({ height, width }: Props) => {
     </g>
     </svg>`;
 
-  return <div dangerouslySetInnerHTML={{ __html: svgCode }} />;
+	return <div dangerouslySetInnerHTML={{ __html: svgCode }} />;
 };
 
 export default PrisonerAvatar;

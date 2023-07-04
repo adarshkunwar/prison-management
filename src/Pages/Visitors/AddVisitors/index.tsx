@@ -1,7 +1,7 @@
-import Forms from '../../../components/UI/Form/Forms';
-import Page from '../../../container/Page';
 import * as Yup from 'yup';
+import Forms from '../../../components/UI/Form/Forms';
 import FormHead from '../../../components/UI/FormHead';
+import Page from '../../../container/Page';
 
 const fields = [
 	{
