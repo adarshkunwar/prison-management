@@ -59,23 +59,25 @@ const NewPrisoners = () => {
     setShowModal(!showModal);
   };
 
-  const modal = showModal && (
-    <div className="bg-black opacity-50 w-screen h-screen">
+  const modal = (
+    <div className="bg-black bg-opacity-50 w-screen h-screen absolute z-40 -mx-5 -my-10">
       <div className="text-white">Show Modal</div>
     </div>
   );
 
   return (
     <Page>
-      <div>
-        {modal || ""}
-        <FormWithModal modalButton={toggleButton} title="Incident" />
-        <Forms
-          fields={fields}
-          initialValues={initialValues}
-          schema={schema}
-          onSubmit={handleSubmit}
-        />
+      <div className="relative">
+        {showModal && modal}
+        <div className="relative">
+          <FormWithModal modalButton={toggleButton} title="Incident" />
+          <Forms
+            fields={fields}
+            initialValues={initialValues}
+            schema={schema}
+            onSubmit={handleSubmit}
+          />
+        </div>
       </div>
     </Page>
   );

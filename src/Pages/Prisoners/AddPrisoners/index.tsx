@@ -1,9 +1,19 @@
-import Forms from '../../../components/UI/Form/Forms';
-import Page from '../../../container/Page';
 import * as Yup from 'yup';
+import Forms from '../../../components/UI/Form/Forms';
 import FormHead from '../../../components/UI/FormHead';
+import Page from '../../../container/Page';
 
 const fields = [
+	{
+		name: 'prisonId',
+		label: 'Prison Id',
+		type: 'text',
+	},
+	{
+		name: 'cellId',
+		label: 'Cell Id',
+		type: 'text',
+	},
 	{
 		name: 'name',
 		label: 'Name',
@@ -24,22 +34,20 @@ const fields = [
 		label: 'Total Sentence',
 		type: 'number',
 	},
-	{
-		name: 'remainingSentence',
-		label: 'Remaining Sentence',
-		type: 'number',
-	},
 ];
 
 const initialValues = {
+	prisonerId: '',
+	cellId: '',
 	name: '',
 	age: '',
 	crime: '',
 	totalSentence: '',
-	remainingSentence: '',
 };
 
 const schema = Yup.object().shape({
+	prisonerId: Yup.string().required('Required'),
+	cellId: Yup.string().required('Required'),
 	name: Yup.string().required('Required'),
 	age: Yup.number().required('Required'),
 	crime: Yup.string().required('Required'),
