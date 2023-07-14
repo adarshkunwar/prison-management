@@ -26,6 +26,8 @@ const Index: React.FC<Props> = ({ name, onClick, falseCondition }) => {
           className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
           onClick={fail}
         >
+          {/* put cross here */}
+
           <svg
             className="w-3 h-3"
             aria-hidden="true"
@@ -44,6 +46,8 @@ const Index: React.FC<Props> = ({ name, onClick, falseCondition }) => {
           <span className="sr-only">Close modal</span>
         </button>
         <div className="p-6 text-center">
+          {/* icon */}
+
           <svg
             className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
             aria-hidden="true"

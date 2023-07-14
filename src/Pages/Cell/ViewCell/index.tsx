@@ -20,6 +20,7 @@ const title = 'Cell';
 
 const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
+  const [showView, setShowView] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
 
   const handleUpdate = () => {
@@ -41,14 +42,13 @@ const Index = () => {
   useEffect(() => {
     if (turnOff) {
       setShowDelete(false);
+      setShowView(false);
+      const interval = setTimeout(() => {
+        setTurnOff(false);
+        return clearTimeout(interval);
+      }, 500);
     }
   }, [turnOff]);
-
-  useEffect(() => {
-    if (showDelete) {
-      setTurnOff(false);
-    }
-  }, [showDelete]);
 
   const modal = (
     <div

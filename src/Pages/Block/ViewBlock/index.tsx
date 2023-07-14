@@ -1,23 +1,51 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AiOutlineEye } from 'react-icons/ai';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
+import axios from '../../../HOC/axios/axios';
 import ModalDanger from '../../../components/UI/ModalDanger';
+import Spinner from '../../../components/UI/Spinner';
 import Table from '../../../components/UI/Table';
 import TableHead from '../../../components/UI/TableHead';
 import Page from '../../../container/Page';
 
-const fields = [
-  { blockID: 1, prisonID: 1, blockName: 'A', capacity: 10 },
-  { blockID: 2, prisonID: 1, blockName: 'B', capacity: 5 },
-];
+type field = {
+  id: number;
+  blockName: string;
+  capacity: number;
+  currentOccupancy: number;
+  prison: {
+    name: string;
+  };
+};
 
-const heading = ['Block ID', 'Prison ID', 'Block Name', 'Capacity', 'Actions'];
+const heading = [
+  'Block Name',
+  'Prison Name',
+  'Capacity',
+  'Current Occupancy',
+  'Actions',
+];
 
 const title = 'Blocks';
 
 const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
+  const [field, setField] = useState<field[]>([]);
+
+  const getData = useCallback(async () => {
+    try {
+      axios.get('/block').then((res) => {
+        const timeOut = setTimeout(() => {
+          console.log(res.data.result, 'collective block');
+          setField(res.data.result);
+          return () => clearTimeout(timeOut);
+        }, 1000);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   const handleUpdate = () => {
     console.log('update');
@@ -38,14 +66,13 @@ const Index = () => {
   useEffect(() => {
     if (turnOff) {
       setShowDelete(false);
+      getData();
+      const timeOut = setTimeout(() => {
+        setTurnOff(false);
+        return () => clearTimeout(timeOut);
+      }, 1000);
     }
-  }, [turnOff]);
-
-  useEffect(() => {
-    if (showDelete) {
-      setTurnOff(false);
-    }
-  }, [showDelete]);
+  }, [turnOff, getData]);
 
   const modal = (
     <div
@@ -65,47 +92,62 @@ const Index = () => {
     </div>
   );
 
+  const showSpinner = (
+    <div className="w-full h-screen flex justify-center items-center">
+      <Spinner />
+    </div>
+  );
+
   return (
     <Page>
       <div>
         {showDelete ? modal : null}
+        {field.length === 0 && turnOff && showSpinner}
         <TableHead title={title} />
         <Table heading={heading}>
-          {fields.map((val, i) => {
-            return (
+          {field &&
+            field.map((item) => (
               <tr
-                key={i}
+                key={item.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                <td
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  {val.blockID}
-                </td>
-                <td className="px-6 py-4">{val.prisonID}</td>
-                <td className="px-6 py-4">{val.blockName}</td>
-                <td className="px-6 py-4">{val.capacity}</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <div className="text-lg" onClick={handleView}>
-                      <AiOutlineEye />
-                    </div>
-                    <div onClick={handleUpdate}>
-                      <BsPencilSquare />
-                    </div>
-                    <div
+                <td className="px-6 py-2">{item.blockName}</td>
+                <td className="px-6 py-2">{item.prison.name}</td>
+                <td className="px-6 py-2">{item.capacity}</td>
+                <td className="px-6 py-2">{item.currentOccupancy}</td>
+                <td className="px-6 py-2">
+                  <div className="flex gap-4">
+                    <button
+                      onClick={() => {
+                        handleView();
+                      }}
+                    >
+                      <AiOutlineEye
+                        className="text-blue-500 text-xl cursor-pointer"
+                        title="View"
+                      />
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleUpdate();
+                      }}
+                    >
+                      <BsPencilSquare
+                        className="text-green-500 "
+                        title="Update"
+                      />
+                    </button>
+                    <button
                       onClick={() => {
                         setShowDelete(true);
                       }}
                     >
-                      <BsTrash />
-                    </div>
+                      <BsTrash className="text-red-500" title="Delete" />
+                    </button>
                   </div>
                 </td>
               </tr>
-            );
-          })}
+            ))}
         </Table>
       </div>
     </Page>
