@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "push" : "powershell -Command \"Write-host 'Enter commit message:'; $commitMessage = Read-host; git add .; git commit -m $commitMessage; git push origin main \"",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
