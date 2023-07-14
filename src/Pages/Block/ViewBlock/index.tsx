@@ -35,13 +35,18 @@ const Index = () => {
 
   const getData = useCallback(async () => {
     try {
-      axios.get('/block').then((res) => {
-        const timeOut = setTimeout(() => {
-          console.log(res.data.result, 'collective block');
-          setField(res.data.result);
-          return () => clearTimeout(timeOut);
-        }, 1000);
-      });
+      const timeOut = setTimeout(() => {
+        axios
+          .get('/block')
+          .then((res) => {
+            console.log(res.data.result, 'collective block');
+            setField(res.data.result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        return () => clearTimeout(timeOut);
+      }, 1000);
     } catch (err) {
       console.log(err);
     }
@@ -102,7 +107,7 @@ const Index = () => {
     <Page>
       <div>
         {showDelete ? modal : null}
-        {field.length === 0 && turnOff && showSpinner}
+        {(field.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
         <Table heading={heading}>
           {field &&

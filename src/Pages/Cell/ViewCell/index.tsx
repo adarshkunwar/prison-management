@@ -3,17 +3,10 @@ import { AiOutlineEye } from 'react-icons/ai';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
 import axios from '../../../HOC/axios/axios';
 import ModalDanger from '../../../components/UI/ModalDanger';
+import Spinner from '../../../components/UI/Spinner';
 import Table from '../../../components/UI/Table';
 import TableHead from '../../../components/UI/TableHead';
 import Page from '../../../container/Page';
-
-// const fields = [
-//   { cellID: 1, blockID: 1, capacity: 4, occupancy: 2 },
-//   { cellID: 2, blockID: 1, capacity: 4, occupancy: 3 },
-//   { cellID: 3, blockID: 2, capacity: 2, occupancy: 1 },
-//   { cellID: 4, blockID: 2, capacity: 2, occupancy: 1 },
-//   { cellID: 5, blockID: 2, capacity: 2, occupancy: 1 },
-// ];
 
 type fields = {
   id: string;
@@ -36,15 +29,18 @@ const Index = () => {
 
   const getData = useCallback(() => {
     try {
-      axios
-        .get('/cell')
-        .then((res) => {
-          console.log(res.data.result);
-          setFields(res.data.result);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const timeout = setTimeout(() => {
+        axios
+          .get('/cell')
+          .then((res) => {
+            console.log(res.data.result);
+            setFields(res.data.result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        return clearTimeout(timeout);
+      }, 1000);
     } catch (err) {
       console.log(err);
     }
@@ -77,6 +73,12 @@ const Index = () => {
     }
   }, [turnOff, getData]);
 
+  const showSpinner = (
+    <div className="w-full h-screen flex justify-center items-center">
+      <Spinner />
+    </div>
+  );
+
   const modal = (
     <div
       className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
@@ -99,6 +101,7 @@ const Index = () => {
     <Page>
       <div>
         {showDelete ? modal : null}
+        {(fields.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
         <Table heading={heading}>
           {fields &&

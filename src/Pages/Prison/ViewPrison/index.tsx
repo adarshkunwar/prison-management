@@ -1,27 +1,55 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AiOutlineEye } from 'react-icons/ai';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
+import axios from '../../../HOC/axios/axios';
 import ModalDanger from '../../../components/UI/ModalDanger';
+import Spinner from '../../../components/UI/Spinner';
 import Table from '../../../components/UI/Table';
 import TableHead from '../../../components/UI/TableHead';
 import Page from '../../../container/Page';
 
-const fields = [
-  {
-    prisonID: 1,
-    prisonName: 'Example Prison',
-    location: 'City X',
-    capacity: 100,
-  },
-];
+type fields = {
+  id: string;
+  name: string;
+  address: string;
+  capacity: number;
+  currentOccupancy: number;
+};
 
-const heading = ['Prison ID', 'Prison Name', 'Location', 'Capacity', 'Actions'];
+const heading = [
+  'SN',
+  'Prison Name',
+  'Location',
+  'Capacity',
+  'Occupancy',
+  'Actions',
+];
 
 const title = 'Prison';
 
 const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
+  const [fields, setFields] = useState<fields[]>([]);
+
+  const getData = useCallback(() => {
+    try {
+      const timeout = setTimeout(() => {
+        axios
+          .get('/prison')
+          .then((res) => {
+            console.log(res.data.result);
+            setFields(res.data.result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        return clearTimeout(timeout);
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   const handleUpdate = () => {
     console.log('update');
@@ -41,15 +69,14 @@ const Index = () => {
 
   useEffect(() => {
     if (turnOff) {
+      getData();
       setShowDelete(false);
+      const timeOut = setTimeout(() => {
+        setTurnOff(false);
+        return clearTimeout(timeOut);
+      }, 500);
     }
-  }, [turnOff]);
-
-  useEffect(() => {
-    if (showDelete) {
-      setTurnOff(false);
-    }
-  }, [showDelete]);
+  }, [turnOff, getData]);
 
   const modal = (
     <div
@@ -69,10 +96,17 @@ const Index = () => {
     </div>
   );
 
+  const showSpinner = (
+    <div className="w-full h-screen flex justify-center items-center">
+      <Spinner />
+    </div>
+  );
+
   return (
     <Page>
       <div>
         {showDelete ? modal : null}
+        {(fields.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
         <Table heading={heading}>
           {fields.map((val, i) => {
@@ -85,11 +119,12 @@ const Index = () => {
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {val.prisonID}
+                  {i + 1}
                 </td>
-                <td className="px-6 py-4">{val.prisonName}</td>
-                <td className="px-6 py-4">{val.location}</td>
+                <td className="px-6 py-4">{val.name}</td>
+                <td className="px-6 py-4">{val.address}</td>
                 <td className="px-6 py-4">{val.capacity}</td>
+                <td className="px-6 py-4">{val.currentOccupancy}</td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2">
                     <div className="text-lg" onClick={handleView}>

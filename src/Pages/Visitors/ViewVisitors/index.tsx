@@ -1,53 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AiOutlineEye } from 'react-icons/ai';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
+import axios from '../../../HOC/axios/axios';
 import ModalDanger from '../../../components/UI/ModalDanger';
+import Spinner from '../../../components/UI/Spinner';
 import Table from '../../../components/UI/Table';
 import TableHead from '../../../components/UI/TableHead';
 import Page from '../../../container/Page';
 
-const fields = [
-  {
-    visitorId: '1',
-    prisonerId: '1',
-    name: 'Alex',
-    age: '20',
-    profession: 'Student',
-    address: 'Kathmandu',
-    contact: '9840000000',
-    relation: 'Brother',
-  },
-  {
-    visitorId: '2',
-    prisonerId: '2',
-    name: 'Alex',
-    age: '20',
-    profession: 'Student',
-    address: 'Kathmandu',
-    contact: '9840000000',
-    relation: 'Brother',
-  },
-  {
-    visitorId: '3',
-    prisonerId: '3',
-    name: 'Alex',
-    age: '20',
-    profession: 'Student',
-    address: 'Kathmandu',
-    contact: '9840000000',
-    relation: 'Brother',
-  },
-];
+type fields = {
+  firstName: string;
+  lastName: string;
+  age: number;
+  address: string;
+  contactNumber: string;
+  relation: string;
+  dateOfVisit: string;
+  prisoner: {
+    firstName: string;
+    lastName: string;
+  };
+};
 
 const heading = [
-  'Visitor ID',
-  'Prisoner ID',
   'Name',
+  'Prisoner Name',
   'Age',
-  'Profession',
   'Address',
-  'Contact',
+  'Contact Number',
   'Relation',
+  'Date of Visit',
   'Action',
 ];
 
@@ -56,6 +38,26 @@ const title = 'Visitors';
 const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
+  const [fields, setFields] = useState<fields[]>([]);
+
+  const getData = useCallback(() => {
+    try {
+      const timeout = setTimeout(() => {
+        axios
+          .get('/visitor')
+          .then((res) => {
+            console.log(res.data.result);
+            setFields(res.data.result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        return clearTimeout(timeout);
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   const handleUpdate = () => {
     console.log('update');
@@ -75,15 +77,14 @@ const Index = () => {
 
   useEffect(() => {
     if (turnOff) {
+      getData();
       setShowDelete(false);
+      const timeout = setTimeout(() => {
+        setTurnOff(false);
+        return clearTimeout(timeout);
+      }, 500);
     }
-  }, [turnOff]);
-
-  useEffect(() => {
-    if (showDelete) {
-      setTurnOff(false);
-    }
-  }, [showDelete]);
+  }, [turnOff, getData]);
 
   const modal = (
     <div
@@ -103,49 +104,56 @@ const Index = () => {
     </div>
   );
 
+  const showSpinner = (
+    <div className="w-full h-screen flex justify-center items-center">
+      <Spinner />
+    </div>
+  );
+
   return (
     <Page>
       <div>
         {showDelete ? modal : null}
+        {(fields.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
         <Table heading={heading}>
-          {fields.map((val, i) => {
-            return (
-              <tr
-                key={i}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-              >
-                <td
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+          {fields &&
+            fields.map((val, i) => {
+              return (
+                <tr
+                  key={i}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
-                  {val.visitorId}
-                </td>
-
-                <td className="px-6 py-4">{val.prisonerId}</td>
-                <td className="px-6 py-4">{val.name}</td>
-                <td className="px-6 py-4">{val.age}</td>
-                <td className="px-6 py-4">{val.profession}</td>
-                <td className="px-6 py-4">{val.address}</td>
-                <td className="px-6 py-4">{val.contact}</td>
-                <td className="px-6 py-4">{val.relation}</td>
-
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <div className="text-lg" onClick={handleView}>
-                      <AiOutlineEye />
+                  <td
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {val?.firstName + ' ' + val?.lastName}
+                  </td>
+                  <td className="px-6 py-4">
+                    {val?.prisoner?.firstName + ' ' + val?.prisoner?.lastName}
+                  </td>
+                  <td className="px-6 py-4">{val.age}</td>
+                  <td className="px-6 py-4">{val.address}</td>
+                  <td className="px-6 py-4">{val.contactNumber}</td>
+                  <td className="px-6 py-4">{val.relation}</td>
+                  <td className="px-6 py-4">{val.dateOfVisit}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <div className="text-lg" onClick={handleView}>
+                        <AiOutlineEye />
+                      </div>
+                      <div onClick={handleUpdate}>
+                        <BsPencilSquare />
+                      </div>
+                      <div onClick={() => setShowDelete(true)}>
+                        <BsTrash />
+                      </div>
                     </div>
-                    <div onClick={handleUpdate}>
-                      <BsPencilSquare />
-                    </div>
-                    <div onClick={() => setShowDelete(true)}>
-                      <BsTrash />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
+                  </td>
+                </tr>
+              );
+            })}
         </Table>
       </div>
     </Page>
