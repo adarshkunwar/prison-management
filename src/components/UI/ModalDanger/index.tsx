@@ -18,7 +18,12 @@ const Index: React.FC<Props> = ({ name, onClick, falseCondition }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <div className="fixed inset-0 bg-gray-900 opacity-50"></div>
       <div className="relative z-10 bg-white rounded-lg shadow-md dark:bg-gray-700">
         <button

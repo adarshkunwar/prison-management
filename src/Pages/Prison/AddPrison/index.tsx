@@ -5,8 +5,10 @@ import FormHead from '@components/UI/FormHead';
 import Page from '@src/container/Page';
 import { styleInput } from '@styles/Form';
 
-// form fields
+// form components
+import axios from '@axios/axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { toast } from 'react-hot-toast';
 import * as Yup from 'yup';
 
 const fields = [
@@ -41,7 +43,21 @@ const schema = Yup.object().shape({
 
 const NewPrisoners: React.FC = () => {
   const handleSubmit = (data: object) => {
-    console.log(data);
+    try {
+      axios
+        .post('/prison', data)
+        .then((res) => {
+          console.log(res);
+          toast.success('Prison is added');
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error('Something went wrong');
+        });
+    } catch (err) {
+      console.log(err);
+      toast.error('Something went wrong');
+    }
   };
 
   return (

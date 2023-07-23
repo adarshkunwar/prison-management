@@ -11,7 +11,12 @@ const Index: React.FC<Props> = ({ failCondition, children }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <div className="fixed inset-0 bg-gray-900 opacity-50"></div>
       <div className="relative z-10 bg-white rounded-lg shadow-md dark:bg-gray-700">
         <button
@@ -39,7 +44,7 @@ const Index: React.FC<Props> = ({ failCondition, children }) => {
           <span className="sr-only">Close modal</span>
         </button>
         <div className="p-6 text-center">
-          <div>{children}</div>
+          <div className="pt-5">{children}</div>
           {/*  <svg
             className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
             aria-hidden="true"

@@ -38,3 +38,9 @@ export type ViewSinglePrison = {
 };
 
 // ----------------------------------------------
+
+export type ViewSinglePrisonProps = {
+  id: string;
+};
+
+// ----------------------------------------------

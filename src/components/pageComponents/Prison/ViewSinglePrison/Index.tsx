@@ -1,12 +1,12 @@
 import List from '@UI/List/List';
-import { ViewSinglePrison } from '@src/types/Prison/viewPrison';
+import {
+  ViewSinglePrison,
+  ViewSinglePrisonProps,
+} from '@src/types/Prison/viewPrison';
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'src/HOC/axios/axios';
-type Props = {
-  id: string;
-};
 
-const Index: React.FC<Props> = ({ id }) => {
+const Index: React.FC<ViewSinglePrisonProps> = ({ id }) => {
   const [singlePrison, setSinglePrison] = useState<ViewSinglePrison>();
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
 

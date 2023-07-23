@@ -13,6 +13,7 @@ import Table from '@UI/Table';
 import TableHead from '@UI/TableHead';
 
 // components
+import UpdatePrison from '@components/pageComponents/Prison/UpdatePrison';
 import {
   heading,
   title,
@@ -22,10 +23,12 @@ import ViewSinglePrison from '@components/pageComponents/Prison/ViewSinglePrison
 // others
 import Page from '@src/container/Page';
 import { viewAllPrison } from '@src/types/Prison/viewPrison';
+import { toast } from 'react-hot-toast';
 
 const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [showView, setShowView] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
   const [fields, setFields] = useState<viewAllPrison[]>([]);
   const [workingId, setWorkingId] = useState<string>('');
@@ -49,12 +52,24 @@ const Index = () => {
     }
   }, []);
 
-  const handleUpdate = () => {
-    console.log('update');
-  };
-
   const handleDelete = () => {
-    console.log('delete');
+    try {
+      axios
+        .delete(`/prison/${workingId}`)
+        .then((res) => {
+          console.log(res);
+          setTurnOff(true);
+          setShowDelete(false);
+          toast.success('Prison is deleted');
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error('Something went wrong');
+        });
+    } catch (err) {
+      console.log(err);
+      toast.error('Something went wrong');
+    }
   };
 
   const falseCondition = () => {
@@ -66,6 +81,7 @@ const Index = () => {
       getData();
       setShowDelete(false);
       setShowView(false);
+      setShowUpdate(false);
       const timeOut = setTimeout(() => {
         setTurnOff(false);
         return clearTimeout(timeOut);
@@ -75,7 +91,7 @@ const Index = () => {
 
   const dangerModal = (
     <div
-      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
+      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none"
       onClick={(e) => {
         e.stopPropagation();
         setTurnOff(true);
@@ -93,7 +109,23 @@ const Index = () => {
 
   const updateModal = (
     <div
-      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
+      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none"
+      onClick={(e) => {
+        e.stopPropagation();
+        setTurnOff(true);
+      }}
+    >
+      {showUpdate && (
+        <ModalBox failCondition={falseCondition}>
+          <UpdatePrison id={workingId} />
+        </ModalBox>
+      )}
+    </div>
+  );
+
+  const viewModal = (
+    <div
+      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none "
       onClick={(e) => {
         e.stopPropagation();
         setTurnOff(true);
@@ -117,7 +149,8 @@ const Index = () => {
     <Page>
       <div>
         {showDelete ? dangerModal : null}
-        {showView ? updateModal : null}
+        {showView ? viewModal : null}
+        {showUpdate ? updateModal : null}
         {(fields.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
         <Table heading={heading}>
@@ -150,7 +183,7 @@ const Index = () => {
                     >
                       <AiOutlineEye />
                     </div>
-                    <div onClick={handleUpdate}>
+                    <div onClick={() => setShowUpdate(true)}>
                       <BsPencilSquare />
                     </div>
                     <div onClick={() => setShowDelete(true)}>
