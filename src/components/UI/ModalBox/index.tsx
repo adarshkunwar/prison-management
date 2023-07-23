@@ -1,20 +1,13 @@
 import React from 'react';
 
 type Props = {
-  name: string;
-  onClick: () => void;
-  falseCondition: () => void;
+  children: React.ReactNode;
+  failCondition: () => void;
 };
 
-const Index: React.FC<Props> = ({ name, onClick, falseCondition }) => {
-  const success = () => {
-    console.log('success');
-    onClick();
-    falseCondition();
-  };
-
+const Index: React.FC<Props> = ({ failCondition, children }) => {
   const fail = () => {
-    falseCondition();
+    failCondition();
   };
 
   return (
@@ -46,8 +39,8 @@ const Index: React.FC<Props> = ({ name, onClick, falseCondition }) => {
           <span className="sr-only">Close modal</span>
         </button>
         <div className="p-6 text-center">
-          {/* icon */}
-          <svg
+          <div>{children}</div>
+          {/*  <svg
             className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +71,7 @@ const Index: React.FC<Props> = ({ name, onClick, falseCondition }) => {
             onClick={fail}
           >
             No, cancel
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

@@ -1,36 +1,34 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AiOutlineEye } from 'react-icons/ai';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
-import axios from '../../../HOC/axios/axios';
-import ModalDanger from '../../../components/UI/ModalDanger';
-import Spinner from '../../../components/UI/Spinner';
-import Table from '../../../components/UI/Table';
-import TableHead from '../../../components/UI/TableHead';
-import Page from '../../../container/Page';
 
-type fields = {
-  id: string;
-  name: string;
-  address: string;
-  capacity: number;
-  currentOccupancy: number;
-};
+// axios
+import axios from '@axios/axios';
 
-const heading = [
-  'SN',
-  'Prison Name',
-  'Location',
-  'Capacity',
-  'Occupancy',
-  'Actions',
-];
+// UI
+import ModalBox from '@UI/ModalBox';
+import ModalDanger from '@UI/ModalDanger';
+import Spinner from '@UI/Spinner';
+import Table from '@UI/Table';
+import TableHead from '@UI/TableHead';
 
-const title = 'Prison';
+// components
+import {
+  heading,
+  title,
+} from '@components/pageComponents/Prison/ViewPrison/heading';
+import ViewSinglePrison from '@components/pageComponents/Prison/ViewSinglePrison/Index';
+
+// others
+import Page from '@src/container/Page';
+import { viewAllPrison } from '@src/types/Prison/viewPrison';
 
 const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
+  const [showView, setShowView] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
-  const [fields, setFields] = useState<fields[]>([]);
+  const [fields, setFields] = useState<viewAllPrison[]>([]);
+  const [workingId, setWorkingId] = useState<string>('');
 
   const getData = useCallback(() => {
     try {
@@ -59,10 +57,6 @@ const Index = () => {
     console.log('delete');
   };
 
-  const handleView = () => {
-    console.log('view');
-  };
-
   const falseCondition = () => {
     setTurnOff(true);
   };
@@ -71,6 +65,7 @@ const Index = () => {
     if (turnOff) {
       getData();
       setShowDelete(false);
+      setShowView(false);
       const timeOut = setTimeout(() => {
         setTurnOff(false);
         return clearTimeout(timeOut);
@@ -78,7 +73,7 @@ const Index = () => {
     }
   }, [turnOff, getData]);
 
-  const modal = (
+  const dangerModal = (
     <div
       className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
       onClick={(e) => {
@@ -96,6 +91,22 @@ const Index = () => {
     </div>
   );
 
+  const updateModal = (
+    <div
+      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
+      onClick={(e) => {
+        e.stopPropagation();
+        setTurnOff(true);
+      }}
+    >
+      {showView && (
+        <ModalBox failCondition={falseCondition}>
+          <ViewSinglePrison id={workingId} />
+        </ModalBox>
+      )}
+    </div>
+  );
+
   const showSpinner = (
     <div className="w-full h-screen flex justify-center items-center">
       <Spinner />
@@ -105,7 +116,8 @@ const Index = () => {
   return (
     <Page>
       <div>
-        {showDelete ? modal : null}
+        {showDelete ? dangerModal : null}
+        {showView ? updateModal : null}
         {(fields.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
         <Table heading={heading}>
@@ -113,6 +125,9 @@ const Index = () => {
             return (
               <tr
                 key={i}
+                onClick={() => {
+                  setWorkingId(val.id);
+                }}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <td
@@ -127,7 +142,12 @@ const Index = () => {
                 <td className="px-6 py-4">{val.currentOccupancy}</td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2">
-                    <div className="text-lg" onClick={handleView}>
+                    <div
+                      className="text-lg"
+                      onClick={() => {
+                        setShowView(true);
+                      }}
+                    >
                       <AiOutlineEye />
                     </div>
                     <div onClick={handleUpdate}>

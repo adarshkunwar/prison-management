@@ -1,7 +1,19 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+  plugins: [react(), tsconfigPaths()],
+  resolve: {
+    alias: {
+      '@src': '/src',
+      '@components': '/src/components',
+      '@pages': '/src/pages',
+      '@axios': '/src/HOC/axios',
+      '@UI': '/src/components/UI',
+      '@types': '/src/types',
+      '@styles': '/src/Styles',
+    },
+  },
+});

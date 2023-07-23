@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "push" : "powershell -Command \"Write-host 'Enter commit message:'; $commitMessage = Read-host; git add .; git commit -m $commitMessage; git push origin main \"",
+    "push": "powershell -Command \"Write-host 'Enter commit message:'; $commitMessage = Read-host; git add .; git commit -m $commitMessage; git push origin main \"",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -20,6 +20,7 @@
     "react-icons": "^4.10.1",
     "react-router-dom": "^6.13.0",
     "react-spinners": "^0.13.8",
+    "vite-tsconfig-paths": "^4.2.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {

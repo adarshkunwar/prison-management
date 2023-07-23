@@ -1,63 +1,103 @@
+import React from 'react';
+
+// components
+import FormHead from '@components/UI/FormHead';
+import Page from '@src/container/Page';
+import { styleInput } from '@styles/Form';
+
+// form fields
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import Forms from '../../../components/UI/Form/Forms';
-import FormHead from '../../../components/UI/FormHead';
-import Page from '../../../container/Page';
 
 const fields = [
-	{
-		name: 'cellID',
-		label: 'Cell ID',
-		type: 'number',
-	},
-	{
-		name: 'blockID',
-		label: 'Block ID',
-		type: 'number',
-	},
-	{
-		name: 'prisonID',
-		label: 'Prison ID',
-		type: 'number',
-	},
-	{
-		name: 'capacity',
-		label: 'Capacity',
-		type: 'number',
-	},
+  {
+    name: 'name',
+    label: 'Prison Name',
+    type: 'text',
+  },
+  {
+    name: 'address',
+    label: 'Address',
+    type: 'text',
+  },
+  {
+    name: 'description',
+    label: 'Description',
+    type: 'text',
+  },
 ];
 
 const initialValues = {
-	cellID: '',
-	blockID: '',
-	prisonID: '',
-	capacity: '',
+  name: '',
+  address: '',
+  description: '',
 };
 
 const schema = Yup.object().shape({
-	cellID: Yup.number().required('Required'),
-	blockID: Yup.number().required('Required'),
-	prisonID: Yup.number().required('Required'),
-	capacity: Yup.number().required('Required'),
+  name: Yup.string().required('Required'),
+  address: Yup.string().required('Required'),
+  description: Yup.string().required('Required'),
 });
 
-const NewPrisoners = () => {
-	const handleSubmit = (data: object) => {
-		console.log(data);
-	};
+const NewPrisoners: React.FC = () => {
+  const handleSubmit = (data: object) => {
+    console.log(data);
+  };
 
-	return (
-		<Page>
-			<div className="">
-				<FormHead title="Add Prison" />
-				<Forms
-					fields={fields}
-					initialValues={initialValues}
-					schema={schema}
-					onSubmit={handleSubmit}
-				/>
-			</div>
-		</Page>
-	);
+  return (
+    <Page>
+      <div className="">
+        <FormHead title="Add Prison" />
+        {/* the form starts here */}
+
+        <Formik
+          initialValues={initialValues}
+          validationSchema={schema}
+          onSubmit={(values) => {
+            handleSubmit(values);
+          }}
+        >
+          <Form className="flex flex-col gap-3">
+            {fields.map((field, index) => (
+              <div className="grid grid-cols-12 items-center" key={index}>
+                <div className="col-span-4">
+                  <label htmlFor={field.name} className={styleInput.label}>
+                    {field.label}
+                  </label>
+                </div>
+                <div className="col-span-8">
+                  {field.type === 'text' && (
+                    <Field
+                      type={field.type}
+                      name={field.name}
+                      id={field.name}
+                      className={styleInput.default}
+                    />
+                  )}
+
+                  <ErrorMessage
+                    name={field.name}
+                    component="div"
+                    className={styleInput.error}
+                  />
+                </div>
+              </div>
+            ))}
+
+            <div className="w-full flex justify-start">
+              <button
+                type="submit"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Submit
+              </button>
+            </div>
+          </Form>
+        </Formik>
+        {/* the form ends here */}
+      </div>
+    </Page>
+  );
 };
 
 export default NewPrisoners;
