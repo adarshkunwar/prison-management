@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // components
 import FormHead from '@components/UI/FormHead';
@@ -11,51 +11,36 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { toast } from 'react-hot-toast';
 import * as Yup from 'yup';
 
-const fields = [
-  {
-    name: 'blockID',
-    label: 'Block ID',
-    type: 'number',
-  },
-  {
-    name: 'prisonID',
-    label: 'Prison ID',
-    type: 'number',
-  },
-  {
-    name: 'blockName',
-    label: 'Block Name',
-    type: 'text',
-  },
-  {
-    name: 'capacity',
-    label: 'Capacity',
-    type: 'number',
-  },
-];
-
-const initialValues = {
-  blockID: '',
-  prisonID: '',
-  blockName: '',
-  capacity: '',
+type fields = {
+  name: string;
+  label: string;
+  type: string;
+  options?: {
+    id: number;
+    name: string;
+  }[];
 };
 
-const schema = Yup.object().shape({
-  blockID: Yup.number().required('Required'),
-  prisonID: Yup.number().required('Required'),
-  blockName: Yup.string().required('Required'),
-  capacity: Yup.number().required('Required'),
-});
+type blockFields = {
+  prison?: string;
+  blockName: string;
+  capacity: number;
+  currentOccupancy: number;
+  totalCell: number;
+};
 
 const NewBlock: React.FC = () => {
-  const handleSubmit = (data: object) => {
+  const [prisonArr, setPrisonArr] = useState([]);
+  const [chosenPrison, setChosenPrison] = useState('');
+
+  const getPrison = async () => {
     try {
       axios
-        .post('/prison', data)
+        .get('/prison')
         .then((res) => {
-          console.log(res);
-          toast.success('Prison is added');
+          console.log(res.data.result);
+          setPrisonArr(res.data.result);
+          toast.success('Prison are loaded');
         })
         .catch((err) => {
           console.log(err);
@@ -67,16 +52,86 @@ const NewBlock: React.FC = () => {
     }
   };
 
+  const fields: fields[] = [
+    {
+      name: 'prison',
+      label: 'Prison',
+      type: 'select',
+      options: prisonArr,
+    },
+    {
+      name: 'blockName',
+      label: 'Block Name',
+      type: 'text',
+    },
+    {
+      name: 'capacity',
+      label: 'Capacity',
+      type: 'number',
+    },
+    {
+      name: 'currentOccupancy',
+      label: 'Current Occupancy',
+      type: 'number',
+    },
+    {
+      name: 'totalCell',
+      label: 'Total Cell',
+      type: 'number',
+    },
+  ];
+
+  const initialValues = {
+    // prison: '',
+    blockName: '',
+    capacity: 0,
+    currentOccupancy: 0,
+    totalCell: 0,
+  };
+
+  const schema = Yup.object().shape({
+    // prison: Yup.string().required('Required'),
+    blockName: Yup.string().required('Required'),
+    capacity: Yup.number().required('Required'),
+    currentOccupancy: Yup.number().required('Required'),
+    totalCell: Yup.number().required('Required'),
+  });
+
+  const handleSubmit = (data: blockFields) => {
+    console.log(data);
+    data.prison = chosenPrison;
+    try {
+      axios
+        .post('/block', data)
+        .then((res) => {
+          console.log(res);
+          toast.success('Block is added');
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error('Something went wrong');
+        });
+    } catch (err) {
+      console.log(err);
+      toast.error('Something went wrong');
+    }
+  };
+
+  useEffect(() => {
+    getPrison();
+  }, []);
+
   return (
     <Page>
       <div className="">
-        <FormHead title="Add Prison" />
+        <FormHead title="Add Block" />
         {/* the form starts here */}
 
         <Formik
           initialValues={initialValues}
           validationSchema={schema}
           onSubmit={(values) => {
+            console.log(values, 'values');
             handleSubmit(values);
           }}
         >
@@ -98,6 +153,33 @@ const NewBlock: React.FC = () => {
                     />
                   )}
 
+                  {field.type === 'number' && (
+                    <Field
+                      type={field.type}
+                      name={field.name}
+                      id={field.name}
+                      className={styleInput.default}
+                    />
+                  )}
+
+                  {field.type === 'select' && (
+                    <Field
+                      as="select"
+                      name={field.name}
+                      id={field.name}
+                      className={styleInput.default}
+                      onChange={(e: any) => setChosenPrison(e.target.value)}
+                    >
+                      <option value="">-------</option>
+                      {field.options &&
+                        field?.options?.map((option, index) => (
+                          <option key={index} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
+                    </Field>
+                  )}
+
                   <ErrorMessage
                     name={field.name}
                     component="div"
@@ -110,7 +192,7 @@ const NewBlock: React.FC = () => {
             <div className="w-full flex justify-start">
               <button
                 type="submit"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="text-white bg-accent font-medium rounded-lg text-sm w-auto px-10 py-2.5 text-center"
               >
                 Submit
               </button>

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { AiOutlineEye } from 'react-icons/ai';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
 import axios from '../../../HOC/axios/axios';
@@ -32,6 +33,7 @@ const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
   const [field, setField] = useState<field[]>([]);
+  const [id, setId] = useState<string | number>('');
 
   const getData = useCallback(async () => {
     try {
@@ -44,11 +46,13 @@ const Index = () => {
           })
           .catch((err) => {
             console.log(err);
+            toast.error('Something went wrong');
           });
         return () => clearTimeout(timeOut);
       }, 1000);
     } catch (err) {
       console.log(err);
+      toast.error('Something went wrong');
     }
   }, []);
 
@@ -57,7 +61,22 @@ const Index = () => {
   };
 
   const handleDelete = () => {
-    console.log('delete');
+    try {
+      axios
+        .delete(`/block/${id}`)
+        .then((res) => {
+          console.log(res.data);
+          toast.success('Block deleted successfully');
+          setTurnOff(true);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error('Something went wrong');
+        });
+    } catch (err) {
+      console.log(err);
+      toast.error('Something went wrong');
+    }
   };
 
   const handleView = () => {
@@ -124,6 +143,7 @@ const Index = () => {
                   <div className="flex gap-4">
                     <button
                       onClick={() => {
+                        setId(item.id);
                         handleView();
                       }}
                     >
@@ -134,6 +154,7 @@ const Index = () => {
                     </button>
                     <button
                       onClick={() => {
+                        setId(item.id);
                         handleUpdate();
                       }}
                     >
@@ -144,6 +165,7 @@ const Index = () => {
                     </button>
                     <button
                       onClick={() => {
+                        setId(item.id);
                         setShowDelete(true);
                       }}
                     >
