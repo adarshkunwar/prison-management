@@ -48,7 +48,7 @@ const SideBar = () => {
                         <span className="flex-1 ml-3">{field.label}</span>
                       </div>
                       {showOptions === field.label && (
-                        <ul className="space-y-2 pl-4">
+                        <ul className="space-y-2 pl-4 pt-1">
                           {field.options.map((option, optionIndex) => (
                             <li key={optionIndex}>
                               <Link

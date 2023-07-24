@@ -33,6 +33,7 @@ export type ViewSinglePrison = {
   address: string;
   capacity: number;
   currentOccupancy: number;
+  description: string;
   blocks: Block[];
   staffs: Staff[];
 };

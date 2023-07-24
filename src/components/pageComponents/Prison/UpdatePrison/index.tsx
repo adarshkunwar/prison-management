@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 // styles
 import { styleInput } from '@styles/Form';
 import { toast } from 'react-hot-toast';
@@ -29,12 +29,6 @@ const field = [
   },
 ];
 
-const initialValues = {
-  name: '',
-  address: '',
-  description: '',
-};
-
 const schema = Yup.object().shape({
   name: Yup.string().required('Required'),
   address: Yup.string().required('Required'),
@@ -42,6 +36,31 @@ const schema = Yup.object().shape({
 });
 
 const Index: React.FC<Props> = ({ id }) => {
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
+  const [description, setDescription] = useState('');
+
+  const initialValues = {
+    name: name,
+    address: address,
+    description: description,
+  };
+
+  const getData = useCallback(() => {
+    try {
+      axios.get(`/prison/${id}`).then((res) => {
+        console.log(res.data.result);
+        // console.log(res.data.result.name, 'name');
+        // console.log(name, 'name');
+        setName(res.data.result.name);
+        setAddress(res.data.result.address);
+        setDescription(res.data.result.description);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [id]);
+
   const update = (data: object) => {
     try {
       axios
@@ -59,6 +78,10 @@ const Index: React.FC<Props> = ({ id }) => {
       toast.error('Something went wrong');
     }
   };
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   return (
     <div>

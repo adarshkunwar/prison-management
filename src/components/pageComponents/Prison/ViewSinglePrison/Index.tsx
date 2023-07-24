@@ -46,10 +46,30 @@ const Index: React.FC<ViewSinglePrisonProps> = ({ id }) => {
       ) : singlePrison ? (
         <div className="flex flex-col gap-5">
           <div className="text-left">
-            <div>Name: {singlePrison.name}</div>
-            <div>Address : {singlePrison.address}</div>
+            <div className="flex items-baseline gap-5">
+              {/* <div className="text-sm text-gray-500">Name:</div> */}
+              <div className="text-2xl font-semibold text-accent">
+                {singlePrison.name}
+              </div>
+            </div>
+            <div className="flex items-baseline gap-5">
+              {/* <div className="text-sm text-gray-500">Address:</div> */}
+              <div className="text-md">{singlePrison.address}</div>
+            </div>
+            <div className="flex items-baseline gap-5">
+              {/* <div className="text-sm text-gray-500">Capacity:</div> */}
+              <div className="text-md">
+                {singlePrison.capacity} / {singlePrison.capacity}
+              </div>
+            </div>
+            <div className="flex items-baseline gap-5">
+              {/* <div className="text-sm text-gray-500">Description:</div> */}
+              <div className="text-md">{singlePrison.description}</div>
+            </div>
+            {/* <div>Address : {singlePrison.address}</div>
             <div>capacity: {singlePrison.capacity}</div>
             <div>Current Occupancy: {singlePrison.currentOccupancy}</div>
+            <div>Description: {singlePrison.description}</div> */}
           </div>
           <div className="text-left">
             <List title="Blocks" heading={Block}>
