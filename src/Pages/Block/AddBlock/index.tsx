@@ -23,10 +23,10 @@ type fields = {
 
 type blockFields = {
   prison?: string;
-  blockName: string;
+  name: string;
   capacity: number;
-  currentOccupancy: number;
-  totalCell: number;
+  currentOccupancy?: number;
+  totalCell?: number;
 };
 
 const NewBlock: React.FC = () => {
@@ -60,7 +60,7 @@ const NewBlock: React.FC = () => {
       options: prisonArr,
     },
     {
-      name: 'blockName',
+      name: 'name',
       label: 'Block Name',
       type: 'text',
     },
@@ -69,32 +69,19 @@ const NewBlock: React.FC = () => {
       label: 'Capacity',
       type: 'number',
     },
-    {
-      name: 'currentOccupancy',
-      label: 'Current Occupancy',
-      type: 'number',
-    },
-    {
-      name: 'totalCell',
-      label: 'Total Cell',
-      type: 'number',
-    },
   ];
 
   const initialValues = {
-    // prison: '',
-    blockName: '',
+    name: '',
     capacity: 0,
-    currentOccupancy: 0,
-    totalCell: 0,
   };
 
   const schema = Yup.object().shape({
     // prison: Yup.string().required('Required'),
-    blockName: Yup.string().required('Required'),
+    name: Yup.string().required('Required'),
     capacity: Yup.number().required('Required'),
-    currentOccupancy: Yup.number().required('Required'),
-    totalCell: Yup.number().required('Required'),
+    // currentOccupancy: Yup.number().required('Required'),
+    // totalCell: Yup.number().required('Required'),
   });
 
   const handleSubmit = (data: blockFields) => {

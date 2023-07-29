@@ -9,8 +9,8 @@ import axios from '@axios/axios';
 import ModalBox from '@UI/ModalBox';
 import ModalDanger from '@UI/ModalDanger';
 import Spinner from '@UI/Spinner';
-import Table from '@UI/Table';
 import TableHead from '@UI/TableHead';
+import Table from '@UI/ViewTable';
 
 // components
 import UpdatePrison from '@components/pageComponents/Prison/UpdatePrison';
@@ -21,6 +21,7 @@ import {
 import ViewSinglePrison from '@components/pageComponents/Prison/ViewSinglePrison/Index';
 
 // others
+import Actions from '@src/components/UI/Form/Actions';
 import Page from '@src/container/Page';
 import { viewAllPrison } from '@src/types/Prison/viewPrison';
 import { toast } from 'react-hot-toast';
@@ -153,6 +154,7 @@ const Index = () => {
         {showUpdate ? updateModal : null}
         {(fields.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
+
         <Table heading={heading}>
           {fields.map((val, i) => {
             return (
@@ -173,23 +175,14 @@ const Index = () => {
                 <td className="px-6 py-4">{val.address}</td>
                 <td className="px-6 py-4">{val.capacity}</td>
                 <td className="px-6 py-4">{val.currentOccupancy}</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="text-lg"
-                      onClick={() => {
-                        setShowView(true);
-                      }}
-                    >
-                      <AiOutlineEye />
-                    </div>
-                    <div onClick={() => setShowUpdate(true)}>
-                      <BsPencilSquare />
-                    </div>
-                    <div onClick={() => setShowDelete(true)}>
-                      <BsTrash />
-                    </div>
-                  </div>
+                <td>
+                  <Actions
+                    deleteButton={() => setShowDelete(true)}
+                    id={val.id}
+                    setWorkingId={setWorkingId}
+                    updateButton={() => setShowUpdate(true)}
+                    viewButton={() => setShowView(true)}
+                  />
                 </td>
               </tr>
             );

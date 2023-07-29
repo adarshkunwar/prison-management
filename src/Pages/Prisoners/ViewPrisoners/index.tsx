@@ -112,7 +112,6 @@ const ViewPrisoner: React.FC = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
   const [fields, setFields] = useState<fields[]>([]);
-  const [todayDate, setTodayDate] = useState(new Date());
   const getData = useCallback(() => {
     try {
       const timout = setTimeout(() => {
@@ -148,12 +147,12 @@ const ViewPrisoner: React.FC = () => {
     setTurnOff(true);
   };
 
-  useEffect(() => {
-    if (fields.length > 0) {
-      console.log(todayDate);
-      console.log(parseInt(fields[0].dateOfRelease));
-    }
-  }, [fields, todayDate]);
+  // useEffect(() => {
+  //   if (fields.length > 0) {
+  //     console.log(todayDate);
+  //     console.log(parseInt(fields[0].dateOfRelease));
+  //   }
+  // }, [fields, todayDate]);
 
   useEffect(() => {
     if (turnOff) {
@@ -208,9 +207,10 @@ const ViewPrisoner: React.FC = () => {
                 >
                   {val.firstName + ' ' + val.lastName}
                 </td>
-                const heading = [ 'name', 'cell', 'age', 'crime', 'total
-                sentence', 'remaining sentence', 'status', 'actions', ];
-                <td className="px-6 py-4">{val.cell.cellName}</td>
+
+                <td className="px-6 py-4">
+                  {val.cell ? val.cell.cellName : '-----'}
+                </td>
                 <td className="px-6 py-4">{val.age}</td>
                 <td className="px-6 py-4">{val.crime}</td>
                 <td className="px-6 py-4">

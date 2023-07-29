@@ -1,17 +1,27 @@
 import { useCallback, useEffect, useState } from 'react';
+
+// axios
+import axios from '@axios/axios';
+
+// UI
+import ModalBox from '@UI/ModalBox';
+import ModalDanger from '@UI/ModalDanger';
+import Spinner from '@UI/Spinner';
+import TableHead from '@UI/TableHead';
+import Table from '@UI/ViewTable';
+
+// components
+import UpdateBlock from '@components/pageComponents/Block/UpdateBlock';
+import ViewSingleBlock from '@components/pageComponents/Block/ViewSingleBlock/';
+
+// others
+import Actions from '@UI/Form/Actions';
+import Page from '@src/container/Page';
 import { toast } from 'react-hot-toast';
-import { AiOutlineEye } from 'react-icons/ai';
-import { BsPencilSquare, BsTrash } from 'react-icons/bs';
-import axios from '../../../HOC/axios/axios';
-import ModalDanger from '../../../components/UI/ModalDanger';
-import Spinner from '../../../components/UI/Spinner';
-import Table from '../../../components/UI/Table';
-import TableHead from '../../../components/UI/TableHead';
-import Page from '../../../container/Page';
 
 type field = {
-  id: number;
-  blockName: string;
+  id: string;
+  name: string;
   capacity: number;
   currentOccupancy: number;
   prison: {
@@ -31,9 +41,11 @@ const title = 'Blocks';
 
 const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
+  const [showView, setShowView] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
   const [field, setField] = useState<field[]>([]);
-  const [id, setId] = useState<string | number>('');
+  const [workingId, setWorkingId] = useState<string>('');
 
   const getData = useCallback(async () => {
     try {
@@ -56,14 +68,10 @@ const Index = () => {
     }
   }, []);
 
-  const handleUpdate = () => {
-    console.log('update');
-  };
-
   const handleDelete = () => {
     try {
       axios
-        .delete(`/block/${id}`)
+        .delete(`/block/${workingId}`)
         .then((res) => {
           console.log(res.data);
           toast.success('Block deleted successfully');
@@ -79,28 +87,26 @@ const Index = () => {
     }
   };
 
-  const handleView = () => {
-    console.log('view');
-  };
-
   const falseCondition = () => {
     setTurnOff(true);
   };
 
   useEffect(() => {
     if (turnOff) {
-      setShowDelete(false);
       getData();
+      setShowDelete(false);
+      setShowView(false);
+      setShowUpdate(false);
       const timeOut = setTimeout(() => {
         setTurnOff(false);
-        return () => clearTimeout(timeOut);
-      }, 1000);
+        return clearTimeout(timeOut);
+      }, 500);
     }
   }, [turnOff, getData]);
 
-  const modal = (
+  const dangerModal = (
     <div
-      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
+      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none"
       onClick={(e) => {
         e.stopPropagation();
         setTurnOff(true);
@@ -116,6 +122,38 @@ const Index = () => {
     </div>
   );
 
+  const updateModal = (
+    <div
+      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none"
+      onClick={(e) => {
+        e.stopPropagation();
+        setTurnOff(true);
+      }}
+    >
+      {showUpdate && (
+        <ModalBox failCondition={falseCondition}>
+          <UpdateBlock id={workingId} />
+        </ModalBox>
+      )}
+    </div>
+  );
+
+  const viewModal = (
+    <div
+      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none "
+      onClick={(e) => {
+        e.stopPropagation();
+        setTurnOff(true);
+      }}
+    >
+      {showView && (
+        <ModalBox failCondition={falseCondition}>
+          <ViewSingleBlock id={workingId} />
+        </ModalBox>
+      )}
+    </div>
+  );
+
   const showSpinner = (
     <div className="w-full h-screen flex justify-center items-center">
       <Spinner />
@@ -125,7 +163,9 @@ const Index = () => {
   return (
     <Page>
       <div>
-        {showDelete ? modal : null}
+        {showDelete ? dangerModal : null}
+        {showView ? viewModal : null}
+        {showUpdate ? updateModal : null}
         {(field.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
         <Table heading={heading}>
@@ -135,43 +175,18 @@ const Index = () => {
                 key={item.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                <td className="px-6 py-2">{item.blockName}</td>
-                <td className="px-6 py-2">{item.prison.name}</td>
-                <td className="px-6 py-2">{item.capacity}</td>
-                <td className="px-6 py-2">{item.currentOccupancy}</td>
-                <td className="px-6 py-2">
-                  <div className="flex gap-4">
-                    <button
-                      onClick={() => {
-                        setId(item.id);
-                        handleView();
-                      }}
-                    >
-                      <AiOutlineEye
-                        className="text-blue-500 text-xl cursor-pointer"
-                        title="View"
-                      />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setId(item.id);
-                        handleUpdate();
-                      }}
-                    >
-                      <BsPencilSquare
-                        className="text-green-500 "
-                        title="Update"
-                      />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setId(item.id);
-                        setShowDelete(true);
-                      }}
-                    >
-                      <BsTrash className="text-red-500" title="Delete" />
-                    </button>
-                  </div>
+                <td className="px-6 py-4">{item.name}</td>
+                <td className="px-6 ">{item.prison?.name}</td>
+                <td className="px-6 ">{item.capacity}</td>
+                <td className="px-6 ">{item.currentOccupancy}</td>
+                <td className="px-6 ">
+                  <Actions
+                    deleteButton={() => setShowDelete(true)}
+                    id={item.id}
+                    setWorkingId={setWorkingId}
+                    updateButton={() => setShowUpdate(true)}
+                    viewButton={() => setShowView(true)}
+                  />
                 </td>
               </tr>
             ))}

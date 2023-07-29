@@ -4,6 +4,7 @@ import { styleInput } from '@styles/Form';
 import { toast } from 'react-hot-toast';
 // form components
 import axios from '@axios/axios';
+import { updateBlock } from '@src/types/Block/viewBlock';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -18,56 +19,50 @@ const field = [
     type: 'text',
   },
   {
-    name: 'address',
-    label: 'Address',
-    type: 'text',
-  },
-  {
-    name: 'description',
-    label: 'Description',
+    name: 'capacity',
+    label: 'Capacity',
     type: 'text',
   },
 ];
 
 const schema = Yup.object().shape({
   name: Yup.string().required('Required'),
-  address: Yup.string().required('Required'),
-  description: Yup.string().required('Required'),
+  capacity: Yup.number().required('Required'),
 });
 
 const Index: React.FC<Props> = ({ id }) => {
   const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [description, setDescription] = useState('');
+  const [capacity, setCapacity] = useState(0);
 
   const initialValues = {
     name: name,
-    address: address,
-    description: description,
+    capacity: capacity,
   };
 
   const getData = useCallback(() => {
     try {
       axios.get(`/prison/${id}`).then((res) => {
         console.log(res.data.result);
-        // console.log(res.data.result.name, 'name');
-        // console.log(name, 'name');
         setName(res.data.result.name);
-        setAddress(res.data.result.address);
-        setDescription(res.data.result.description);
+        setCapacity(res.data.result.capacity);
       });
     } catch (err) {
       console.log(err);
     }
   }, [id]);
 
-  const update = (data: object) => {
+  const update = (data: updateBlock) => {
     try {
+      const name =
+        data.name.trim().slice(0, 1).toUpperCase() + data.name.trim().slice(1);
+      const capacity = parseInt(data.capacity.toString());
+      data.name = name;
+      data.capacity = capacity;
       axios
-        .put(`/prison/${id}`, data)
+        .put(`/block/${id}`, data)
         .then((res) => {
           console.log(res);
-          toast.success('Prison is updated');
+          toast.success('Block is updated');
         })
         .catch((err) => {
           console.log(err);

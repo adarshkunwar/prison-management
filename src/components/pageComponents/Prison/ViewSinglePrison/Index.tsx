@@ -1,4 +1,4 @@
-import List from '@UI/List/List';
+import Table from '@UI/ViewTable';
 import {
   ViewSinglePrison,
   ViewSinglePrisonProps,
@@ -10,7 +10,7 @@ const Index: React.FC<ViewSinglePrisonProps> = ({ id }) => {
   const [singlePrison, setSinglePrison] = useState<ViewSinglePrison>();
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
-  const Block = ['capacity', 'currentOccupancy', 'blockName'];
+  const Block = ['Block Name', 'Current Occupancy', 'Capacity', 'Total Cell'];
   const staff = ['name', 'designation', 'contact', 'salary', 'address'];
 
   const getData = useCallback(() => {
@@ -49,22 +49,22 @@ const Index: React.FC<ViewSinglePrisonProps> = ({ id }) => {
             <div className="flex items-baseline gap-5">
               {/* <div className="text-sm text-gray-500">Name:</div> */}
               <div className="text-2xl font-semibold text-accent">
-                {singlePrison.name}
+                {singlePrison?.name}
               </div>
             </div>
             <div className="flex items-baseline gap-5">
               {/* <div className="text-sm text-gray-500">Address:</div> */}
-              <div className="text-md">{singlePrison.address}</div>
+              <div className="text-md">{singlePrison?.address}</div>
             </div>
             <div className="flex items-baseline gap-5">
               {/* <div className="text-sm text-gray-500">Capacity:</div> */}
               <div className="text-md">
-                {singlePrison.capacity} / {singlePrison.capacity}
+                {singlePrison?.currentOccupancy} / {singlePrison?.capacity}
               </div>
             </div>
             <div className="flex items-baseline gap-5">
               {/* <div className="text-sm text-gray-500">Description:</div> */}
-              <div className="text-md">{singlePrison.description}</div>
+              <div className="text-md">{singlePrison?.description}</div>
             </div>
             {/* <div>Address : {singlePrison.address}</div>
             <div>capacity: {singlePrison.capacity}</div>
@@ -72,34 +72,55 @@ const Index: React.FC<ViewSinglePrisonProps> = ({ id }) => {
             <div>Description: {singlePrison.description}</div> */}
           </div>
           <div className="text-left">
-            <List title="Blocks" heading={Block}>
-              {singlePrison.blocks.map((val, i) => {
-                return (
-                  <tr key={i}>
-                    <td className="pl-2 border">{val.capacity}</td>
-                    <td className="pl-2 border">{val.currentOccupancy}</td>
-                    <td className="pl-2 border">{val.blockName}</td>
-                  </tr>
-                );
-              })}
-            </List>
+            {singlePrison.blocks.length > 0 ? (
+              <div>
+                <div>
+                  <div className="text-xl font-semibold text-accent">
+                    Blocks
+                  </div>
+                </div>
+                <Table heading={Block}>
+                  {singlePrison.blocks.map((val, i) => {
+                    return (
+                      <tr key={i}>
+                        <td className="pl-2 py-2 border">{val.name}</td>
+                        <td className="pl-2 border">{val.currentOccupancy}</td>
+                        <td className="pl-2 border">{val.capacity}</td>
+                        <td className="pl-2 border">{val.totalCell}</td>
+                      </tr>
+                    );
+                  })}
+                </Table>
+              </div>
+            ) : (
+              <div className="text-xl font-semibold text-accent">No Blocks</div>
+            )}
           </div>
           <div className="text-left">
-            <List title="Staff" heading={staff}>
-              {singlePrison.staffs.map((val, i) => {
-                return (
-                  <tr key={i}>
-                    <td className="pl-2 border pr-5">
-                      {val.firstName + ' ' + val.lastName}
-                    </td>
-                    <td className="pl-2 border pr-5">{val.designation}</td>
-                    <td className="pl-2 border pr-5">{val.contactNumber}</td>
-                    <td className="pl-2 border pr-5">{val.salary}</td>
-                    <td className="pl-2 border pr-5">{val.address}</td>
-                  </tr>
-                );
-              })}
-            </List>
+            {singlePrison.staffs.length > 0 ? (
+              <div>
+                <div className="text-xl font-semibold text-accent">Staffs</div>
+                <Table heading={staff}>
+                  {singlePrison.staffs.map((val, i) => {
+                    return (
+                      <tr key={i}>
+                        <td className="pl-2 border pr-5">
+                          {val.firstName + ' ' + val.lastName}
+                        </td>
+                        <td className="pl-2 border pr-5">{val.designation}</td>
+                        <td className="pl-2 border pr-5">
+                          {val.contactNumber}
+                        </td>
+                        <td className="pl-2 border pr-5">{val.salary}</td>
+                        <td className="pl-2 border pr-5">{val.address}</td>
+                      </tr>
+                    );
+                  })}
+                </Table>
+              </div>
+            ) : (
+              <div className="text-xl font-semibold text-accent">No Staff</div>
+            )}
           </div>
         </div>
       ) : (

@@ -12,7 +12,8 @@ type Block = {
   id: string;
   capacity: number;
   currentOccupancy: number;
-  blockName: string;
+  name: string;
+  totalCell: number;
 };
 
 type Staff = {
@@ -22,7 +23,7 @@ type Staff = {
   age: number;
   address: string;
   contactNumber: string;
-  dateOfJoining: string; // You might want to use a Date type instead of string
+  dateOfJoining: string;
   salary: number;
   designation: string;
 };

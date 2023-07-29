@@ -1,27 +1,26 @@
 import React, { useCallback, useEffect, useState } from 'react';
 // types
 import {
-  ViewSinglePrison,
-  ViewSinglePrisonProps,
-} from '@src/types/Prison/viewPrison';
+  viewSingleBlock,
+  viewSingleBlockProps,
+} from '@src/types/Block/viewBlock';
 // components
-import List from '@UI/List/List';
+import Table from '@UI/ViewTable';
 // axios
 import axios from '@axios/axios';
 
-const Index: React.FC<ViewSinglePrisonProps> = ({ id }) => {
-  const [singlePrison, setSinglePrison] = useState<ViewSinglePrison>();
+const Index: React.FC<viewSingleBlockProps> = ({ id }) => {
+  const [singlePrison, setSinglePrison] = useState<viewSingleBlock>();
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
-  const Block = ['capacity', 'currentOccupancy', 'blockName'];
-  const staff = ['name', 'designation', 'contact', 'salary', 'address'];
+  const cell = ['name', 'capacity', 'currentOccupancy'];
 
   const getData = useCallback(() => {
     setShowSpinner(true);
     const timeout = setTimeout(() => {
       try {
         axios
-          .get(`/prison/${id}`)
+          .get(`/block/${id}`)
           .then((res) => {
             console.log(res.data.result);
             setSinglePrison(res.data.result);
@@ -57,53 +56,38 @@ const Index: React.FC<ViewSinglePrisonProps> = ({ id }) => {
             </div>
             <div className="flex items-baseline gap-5">
               {/* <div className="text-sm text-gray-500">Address:</div> */}
-              <div className="text-md">{singlePrison.address}</div>
+              <div className="text-md">{singlePrison.totalCell}</div>
             </div>
             <div className="flex items-baseline gap-5">
               {/* <div className="text-sm text-gray-500">Capacity:</div> */}
               <div className="text-md">
-                {singlePrison.capacity} / {singlePrison.capacity}
+                {singlePrison.currentOccupancy} / {singlePrison.capacity}
               </div>
             </div>
-            <div className="flex items-baseline gap-5">
-              {/* <div className="text-sm text-gray-500">Description:</div> */}
-              <div className="text-md">{singlePrison.description}</div>
-            </div>
-            {/* <div>Address : {singlePrison.address}</div>
-            <div>capacity: {singlePrison.capacity}</div>
-            <div>Current Occupancy: {singlePrison.currentOccupancy}</div>
-            <div>Description: {singlePrison.description}</div> */}
           </div>
           <div className="text-left">
-            <List title="Blocks" heading={Block}>
-              {singlePrison.blocks.map((val, i) => {
-                return (
-                  <tr key={i}>
-                    <td className="pl-2 border">{val.capacity}</td>
-                    <td className="pl-2 border">{val.currentOccupancy}</td>
-                    <td className="pl-2 border">{val.blockName}</td>
-                  </tr>
-                );
-              })}
-            </List>
+            {singlePrison.cells.length > 0 ? (
+              <div>
+                <div className="text-xl font-semibold text-accent">Cells </div>
+                <Table heading={cell}>
+                  {singlePrison.cells.map((val, i) => {
+                    return (
+                      <tr key={i}>
+                        <td className="pl-2 border">{val.name}</td>
+                        <td className="pl-2 border">{val.currentOccupancy}</td>
+                        <td className="pl-2 border">{val.capacity}</td>
+                      </tr>
+                    );
+                  })}
+                </Table>
+              </div>
+            ) : (
+              <div className="text-xl font-semibold text-accent">
+                No Cell Found
+              </div>
+            )}
           </div>
-          <div className="text-left">
-            <List title="Staff" heading={staff}>
-              {singlePrison.staffs.map((val, i) => {
-                return (
-                  <tr key={i}>
-                    <td className="pl-2 border pr-5">
-                      {val.firstName + ' ' + val.lastName}
-                    </td>
-                    <td className="pl-2 border pr-5">{val.designation}</td>
-                    <td className="pl-2 border pr-5">{val.contactNumber}</td>
-                    <td className="pl-2 border pr-5">{val.salary}</td>
-                    <td className="pl-2 border pr-5">{val.address}</td>
-                  </tr>
-                );
-              })}
-            </List>
-          </div>
+          <div className="text-left"></div>
         </div>
       ) : (
         <div>Some Error Ocuured, the prison could not be found</div>
