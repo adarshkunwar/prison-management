@@ -4,6 +4,7 @@ import { styleInput } from '@styles/Form';
 import { toast } from 'react-hot-toast';
 // form components
 import axios from '@axios/axios';
+import { updateBlock } from '@src/types/Block/viewBlock';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -14,35 +15,53 @@ type Props = {
 const field = [
   {
     name: 'name',
-    label: 'Prison Name',
+    label: 'Name',
     type: 'text',
   },
   {
-    name: 'address',
-    label: 'Address',
-    type: 'text',
-  },
-  {
-    name: 'description',
-    label: 'Description',
+    name: 'capacity',
+    label: 'Capacity',
     type: 'text',
   },
 ];
 
 const schema = Yup.object().shape({
   name: Yup.string().required('Required'),
-  address: Yup.string().required('Required'),
-  description: Yup.string().required('Required'),
+  capacity: Yup.number().required('Required'),
 });
 
 const Index: React.FC<Props> = ({ id }) => {
-  const update = (data: object) => {
+  const [name, setName] = useState('');
+  const [capacity, setCapacity] = useState(0);
+
+  const initialValues = {
+    name: name,
+    capacity: capacity,
+  };
+
+  const getData = useCallback(() => {
+    try {
+      axios.get(`cell/${id}`).then((res) => {
+        console.log(res.data.result);
+        setName(res.data.result.name);
+        setCapacity(res.data.result.capacity);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [id]);
+
+  const update = (data: updateBlock) => {
     try {
       axios
-        .put(`/prison/${id}`, data)
+        .put(`/cell/${id}`, {
+          ...data,
+          name: data.name.slice(0, 1).toUpperCase() + data.name.slice(1),
+          capacity: parseInt(data.capacity.toString()),
+        })
         .then((res) => {
           console.log(res);
-          toast.success('Prison is updated');
+          toast.success('Block is updated');
         })
         .catch((err) => {
           console.log(err);
@@ -52,36 +71,6 @@ const Index: React.FC<Props> = ({ id }) => {
       console.log(err);
       toast.error('Something went wrong');
     }
-  };
-
-  const getData = useCallback(() => {
-    try {
-      axios.get(`/prison/${id}`).then((res) => {
-        const name = res.data.result.name;
-        const address = res.data.result.address;
-        const description = res.data.result.description;
-        console.log(name);
-        console.log(address);
-        return {
-          name: name,
-          address: address,
-          description: description,
-        };
-      });
-    } catch (err) {
-      console.log(err);
-      return {
-        name: 'err',
-        address: '',
-        description: '',
-      };
-    }
-  }, [id]);
-  // TODO: fix initialValues for update
-  const initialValues = getData() || {
-    name: '',
-    address: '',
-    description: '',
   };
 
   useEffect(() => {

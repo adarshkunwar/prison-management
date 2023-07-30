@@ -6,6 +6,54 @@ export const fields = [
   },
   {
     icon: null,
+    label: 'Prison',
+    options: [
+      {
+        icon: null,
+        label: 'View Prison',
+        path: '/prison',
+      },
+      {
+        icon: null,
+        label: 'Add Prison',
+        path: '/new-prison',
+      },
+    ],
+  },
+  {
+    icon: null,
+    label: 'Block',
+    options: [
+      {
+        icon: null,
+        label: 'View Block',
+        path: '/block',
+      },
+      {
+        icon: null,
+        label: 'Add Block',
+        path: '/new-block',
+      },
+    ],
+  },
+  {
+    icon: null,
+    label: 'Cell',
+    options: [
+      {
+        icon: null,
+        label: 'View Cell',
+        path: '/cell',
+      },
+      {
+        icon: null,
+        label: 'Add Cell',
+        path: '/new-cell',
+      },
+    ],
+  },
+  {
+    icon: null,
     label: 'Prisoner',
     options: [
       {
@@ -49,54 +97,6 @@ export const fields = [
         icon: null,
         label: 'Add Staff',
         path: '/new-staff',
-      },
-    ],
-  },
-  {
-    icon: null,
-    label: 'Cell',
-    options: [
-      {
-        icon: null,
-        label: 'View Cell',
-        path: '/cell',
-      },
-      {
-        icon: null,
-        label: 'Add Cell',
-        path: '/new-cell',
-      },
-    ],
-  },
-  {
-    icon: null,
-    label: 'Block',
-    options: [
-      {
-        icon: null,
-        label: 'View Block',
-        path: '/block',
-      },
-      {
-        icon: null,
-        label: 'Add Block',
-        path: '/new-block',
-      },
-    ],
-  },
-  {
-    icon: null,
-    label: 'Prison',
-    options: [
-      {
-        icon: null,
-        label: 'View Prison',
-        path: '/prison',
-      },
-      {
-        icon: null,
-        label: 'Add Prison',
-        path: '/new-prison',
       },
     ],
   },

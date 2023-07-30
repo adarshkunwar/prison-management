@@ -1,20 +1,31 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AiOutlineEye } from 'react-icons/ai';
-import { BsPencilSquare, BsTrash } from 'react-icons/bs';
-import axios from '../../../HOC/axios/axios';
-import ModalDanger from '../../../components/UI/ModalDanger';
-import Spinner from '../../../components/UI/Spinner';
-import Table from '../../../components/UI/Table';
-import TableHead from '../../../components/UI/TableHead';
-import Page from '../../../container/Page';
+
+// axios
+import axios from '@axios/axios';
+
+// UI
+import ModalBox from '@UI/ModalBox';
+import ModalDanger from '@UI/ModalDanger';
+import Spinner from '@UI/Spinner';
+import TableHead from '@UI/TableHead';
+import Table from '@UI/ViewTable';
+
+// components
+import ViewSingleCell from '@components/pageComponents/Cell/ViewSingleCell';
+import UpdateCell from '@components/pageComponents/Cell/updateCell';
+
+// others
+import Actions from '@UI/Form/Actions';
+import Page from '@src/container/Page';
+import { toast } from 'react-hot-toast';
 
 type fields = {
   id: string;
-  cellName: string;
+  name: string;
   currentOccupancy: number;
   capacity: number;
   block: {
-    blockName: string;
+    name: string;
   };
 };
 
@@ -24,38 +35,35 @@ const title = 'Cell';
 
 const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
+  const [showView, setShowView] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
-  const [fields, setFields] = useState<fields[]>([]);
+  const [field, setField] = useState<fields[]>([]);
+  const [workingId, setWorkingId] = useState<string>('');
 
-  const getData = useCallback(() => {
+  const getData = useCallback(async () => {
     try {
-      const timeout = setTimeout(() => {
+      const timeOut = setTimeout(() => {
         axios
           .get('/cell')
           .then((res) => {
-            console.log(res.data.result);
-            setFields(res.data.result);
+            console.log(res.data.result, 'collective block');
+            setField(res.data.result);
           })
           .catch((err) => {
             console.log(err);
+            toast.error('Something went wrong');
           });
-        return clearTimeout(timeout);
+        return () => clearTimeout(timeOut);
       }, 1000);
     } catch (err) {
       console.log(err);
+      toast.error('Something went wrong');
     }
   }, []);
 
-  const handleUpdate = () => {
-    console.log('update');
-  };
-
   const handleDelete = () => {
     console.log('delete');
-  };
-
-  const handleView = () => {
-    console.log('view');
   };
 
   const falseCondition = () => {
@@ -64,8 +72,10 @@ const Index = () => {
 
   useEffect(() => {
     if (turnOff) {
-      setShowDelete(false);
       getData();
+      setShowDelete(false);
+      setShowView(false);
+      setShowUpdate(false);
       const interval = setTimeout(() => {
         setTurnOff(false);
         return clearTimeout(interval);
@@ -79,33 +89,37 @@ const Index = () => {
     </div>
   );
 
-  const modal = (
-    <div
-      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
-      onClick={(e) => {
-        e.stopPropagation();
-        setTurnOff(true);
-      }}
-    >
-      {showDelete && (
-        <ModalDanger
-          name={title}
-          falseCondition={falseCondition}
-          onClick={handleDelete}
-        />
-      )}
-    </div>
+  const dangerModal = (
+    <ModalDanger
+      name={title}
+      falseCondition={falseCondition}
+      onClick={handleDelete}
+    />
+  );
+
+  const updateModal = (
+    <ModalBox failCondition={falseCondition}>
+      <UpdateCell id={workingId} />
+    </ModalBox>
+  );
+
+  const viewModal = (
+    <ModalBox failCondition={falseCondition}>
+      <ViewSingleCell id={workingId} />
+    </ModalBox>
   );
 
   return (
     <Page>
       <div>
-        {showDelete ? modal : null}
-        {(fields.length === 0 || turnOff) && showSpinner}
+        {showDelete ? dangerModal : null}
+        {showView ? viewModal : null}
+        {showUpdate ? updateModal : null}
+        {(field.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
         <Table heading={heading}>
-          {fields &&
-            fields.map((val, i) => {
+          {field &&
+            field.map((val, i) => {
               return (
                 <tr
                   key={i}
@@ -115,23 +129,19 @@ const Index = () => {
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {val.cellName}
+                    {val.name}
                   </td>
-                  <td className="px-6 py-4">{val.block.blockName}</td>
+                  <td className="px-6 py-4">{val.block?.name}</td>
                   <td className="px-6 py-4">{val.capacity}</td>
                   <td className="px-6 py-4">{val.currentOccupancy}</td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <div className="text-lg" onClick={handleView}>
-                        <AiOutlineEye />
-                      </div>
-                      <div onClick={handleUpdate}>
-                        <BsPencilSquare />
-                      </div>
-                      <div onClick={() => setShowDelete(true)}>
-                        <BsTrash />
-                      </div>
-                    </div>
+                    <Actions
+                      deleteButton={() => setShowDelete(true)}
+                      id={val.id}
+                      setWorkingId={setWorkingId}
+                      updateButton={() => setShowUpdate(true)}
+                      viewButton={() => setShowView(true)}
+                    />
                   </td>
                 </tr>
               );

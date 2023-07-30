@@ -1,4 +1,5 @@
 import React from 'react';
+import { RxCross1 } from 'react-icons/rx';
 
 type Props = {
   name: string;
@@ -20,34 +21,22 @@ const Index: React.FC<Props> = ({ name, onClick, falseCondition }) => {
   return (
     <div
       className="fixed inset-0 flex items-center justify-center z-50"
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
+      onClick={fail}
     >
       <div className="fixed inset-0 bg-gray-900 opacity-50"></div>
-      <div className="relative z-10 bg-white rounded-lg shadow-md dark:bg-gray-700">
+      <div
+        className="relative z-10 bg-white rounded-lg shadow-md dark:bg-gray-700"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <button
           type="button"
-          className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          className="absolute top-3 right-2.5 text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 ml-auto inline-flex justify-center items-center"
           onClick={fail}
         >
           {/* put cross here */}
-
-          <svg
-            className="w-3 h-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 14"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-            />
-          </svg>
+          <RxCross1 />
           <span className="sr-only">Close modal</span>
         </button>
         <div className="p-6 text-center">
