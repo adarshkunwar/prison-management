@@ -21,13 +21,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@src/*" : ["src/*"],
-      "@components/*" : ["src/components/*"],
-      "@pages/*" : ["src/pages/*"],
-      "@axios/*" : ["src/HOC/axios/*"],
-      "@UI/*" : ["src/components/UI/*"],
-      "@types/*" : ["src/types/*"],
-      "@styles/*" : ["src/Styles/*"],
+      "@src/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@pages/*": ["src/pages/*"],
+      "@axios/*": ["src/HOC/axios/*"],
+      "@UI/*": ["src/components/UI/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@styles/*": ["src/Styles/*"]
     }
   },
   "references": [{ "path": "./tsconfig.node.json" }]

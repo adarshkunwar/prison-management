@@ -1,25 +1,17 @@
+import getPrison from '@src/hooks/usePrison';
 import { useCallback, useEffect, useState } from 'react';
-import { AiOutlineEye } from 'react-icons/ai';
-import { BsPencilSquare, BsTrash } from 'react-icons/bs';
-
 // axios
 import axios from '@axios/axios';
-
 // UI
 import ModalBox from '@UI/ModalBox';
 import ModalDanger from '@UI/ModalDanger';
 import Spinner from '@UI/Spinner';
 import TableHead from '@UI/TableHead';
 import Table from '@UI/ViewTable';
-
 // components
 import UpdatePrison from '@components/pageComponents/Prison/UpdatePrison';
-import {
-  heading,
-  title,
-} from '@components/pageComponents/Prison/ViewPrison/heading';
+import { heading } from '@components/pageComponents/Prison/ViewPrison/heading';
 import ViewSinglePrison from '@components/pageComponents/Prison/ViewSinglePrison/Index';
-
 // others
 import Actions from '@src/components/UI/Form/Actions';
 import Page from '@src/container/Page';
@@ -33,23 +25,13 @@ const Index = () => {
   const [turnOff, setTurnOff] = useState(true);
   const [fields, setFields] = useState<viewAllPrison[]>([]);
   const [workingId, setWorkingId] = useState<string>('');
+  const title = 'Prison';
 
   const getData = useCallback(() => {
     try {
-      const timeout = setTimeout(() => {
-        axios
-          .get('/prison')
-          .then((res) => {
-            console.log(res.data.result);
-            setFields(res.data.result);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        return clearTimeout(timeout);
-      }, 1000);
+      setFields(getPrison());
     } catch (err) {
-      console.log(err);
+      toast.error('Something went wrong');
     }
   }, []);
 
@@ -73,9 +55,7 @@ const Index = () => {
     }
   };
 
-  const falseCondition = () => {
-    setTurnOff(true);
-  };
+  const falseCondition = () => setTurnOff(true);
 
   useEffect(() => {
     if (turnOff) {
@@ -83,6 +63,7 @@ const Index = () => {
       setShowDelete(false);
       setShowView(false);
       setShowUpdate(false);
+      console.log();
       const timeOut = setTimeout(() => {
         setTurnOff(false);
         return clearTimeout(timeOut);
@@ -91,53 +72,23 @@ const Index = () => {
   }, [turnOff, getData]);
 
   const dangerModal = (
-    <div
-      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none"
-      onClick={(e) => {
-        e.stopPropagation();
-        setTurnOff(true);
-      }}
-    >
-      {showDelete && (
-        <ModalDanger
-          name={title}
-          falseCondition={falseCondition}
-          onClick={handleDelete}
-        />
-      )}
-    </div>
+    <ModalDanger
+      name={title}
+      falseCondition={falseCondition}
+      onClick={handleDelete}
+    />
   );
 
   const updateModal = (
-    <div
-      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none"
-      onClick={(e) => {
-        e.stopPropagation();
-        setTurnOff(true);
-      }}
-    >
-      {showUpdate && (
-        <ModalBox failCondition={falseCondition}>
-          <UpdatePrison id={workingId} />
-        </ModalBox>
-      )}
-    </div>
+    <ModalBox failCondition={falseCondition}>
+      <UpdatePrison id={workingId} />
+    </ModalBox>
   );
 
   const viewModal = (
-    <div
-      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none "
-      onClick={(e) => {
-        e.stopPropagation();
-        setTurnOff(true);
-      }}
-    >
-      {showView && (
-        <ModalBox failCondition={falseCondition}>
-          <ViewSinglePrison id={workingId} />
-        </ModalBox>
-      )}
-    </div>
+    <ModalBox failCondition={falseCondition}>
+      <ViewSinglePrison id={workingId} />
+    </ModalBox>
   );
 
   const showSpinner = (

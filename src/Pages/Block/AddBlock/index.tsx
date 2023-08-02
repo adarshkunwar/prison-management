@@ -1,33 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 // components
 import FormHead from '@components/UI/FormHead';
+import { createField } from '@components/Utils/CreateFields';
+import prisonAll from '@hooks/usePrison';
 import Page from '@src/container/Page';
 import { styleInput } from '@styles/Form';
 
 // form components
 import axios from '@axios/axios';
+import { addBlock, fields } from '@src/types/Data';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { toast } from 'react-hot-toast';
 import * as Yup from 'yup';
-
-type fields = {
-  name: string;
-  label: string;
-  type: string;
-  options?: {
-    id: number;
-    name: string;
-  }[];
-};
-
-type blockFields = {
-  prison?: string;
-  name: string;
-  capacity: number;
-  currentOccupancy?: number;
-  totalCell?: number;
-};
 
 const NewBlock: React.FC = () => {
   const [prisonArr, setPrisonArr] = useState([]);
@@ -35,40 +20,16 @@ const NewBlock: React.FC = () => {
 
   const getPrison = async () => {
     try {
-      axios
-        .get('/prison')
-        .then((res) => {
-          console.log(res.data.result);
-          setPrisonArr(res.data.result);
-          toast.success('Prison are loaded');
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error('Something went wrong');
-        });
+      setPrisonArr(prisonAll());
     } catch (err) {
-      console.log(err);
       toast.error('Something went wrong');
     }
   };
 
   const fields: fields[] = [
-    {
-      name: 'prison',
-      label: 'Prison',
-      type: 'select',
-      options: prisonArr,
-    },
-    {
-      name: 'name',
-      label: 'Block Name',
-      type: 'text',
-    },
-    {
-      name: 'capacity',
-      label: 'Capacity',
-      type: 'number',
-    },
+    createField('prison', 'Prison', 'select', prisonArr),
+    createField('name', 'Block Name', 'text'),
+    createField('capacity', 'Capacity', 'number'),
   ];
 
   const initialValues = {
@@ -77,14 +38,11 @@ const NewBlock: React.FC = () => {
   };
 
   const schema = Yup.object().shape({
-    // prison: Yup.string().required('Required'),
     name: Yup.string().required('Required'),
     capacity: Yup.number().required('Required'),
-    // currentOccupancy: Yup.number().required('Required'),
-    // totalCell: Yup.number().required('Required'),
   });
 
-  const handleSubmit = (data: blockFields) => {
+  const handleSubmit = (data: addBlock) => {
     console.log(data);
     data.prison = chosenPrison;
     try {
@@ -155,7 +113,9 @@ const NewBlock: React.FC = () => {
                       name={field.name}
                       id={field.name}
                       className={styleInput.default}
-                      onChange={(e: any) => setChosenPrison(e.target.value)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setChosenPrison(e.currentTarget.value)
+                      }
                     >
                       <option value="">-------</option>
                       {field.options &&
@@ -169,7 +129,6 @@ const NewBlock: React.FC = () => {
 
                   <ErrorMessage
                     name={field.name}
-                    component="div"
                     className={styleInput.error}
                   />
                 </div>

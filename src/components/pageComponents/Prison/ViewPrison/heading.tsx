@@ -6,5 +6,3 @@ export const heading = [
   'Occupancy',
   'Actions',
 ];
-
-export const title = 'Prison';

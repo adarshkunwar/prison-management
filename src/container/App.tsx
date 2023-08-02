@@ -1,23 +1,21 @@
-import Layout from "../HOC/Layout/Layout";
-import AddBlock from "../Pages/Block/AddBlock";
-import ViewBlock from "../Pages/Block/ViewBlock";
-import AddCell from "../Pages/Cell/AddCell";
-import ViewCell from "../Pages/Cell/ViewCell";
-import AddIncidents from '../Pages/Incident/AddIncidents';
-import ViewIncidents from '../Pages/Incident/ViewIncidents';
-import AdddMedicalReports from '../Pages/MedicalRecords/AddMedicalRecords';
-import ViewMedicalReports from '../Pages/MedicalRecords/VIewMedicalRecords';
-import AddPrison from '../Pages/Prison/AddPrison';
-import ViewPrison from '../Pages/Prison/ViewPrison';
-import AddPrisoners from '../Pages/Prisoners/AddPrisoners';
-import ViewPrisoners from '../Pages/Prisoners/ViewPrisoners';
-import AddStaff from '../Pages/Staff/AddStaff';
-import ViewStaff from '../Pages/Staff/ViewStaff';
-import AddVisitor from '../Pages/Visitors/AddVisitors';
-import ViewVisitor from '../Pages/Visitors/ViewVisitors';
-
-import Dashboard from '../Pages/Dashboard';
-// import NewPrisoners from "../Pages/Prisoners/NewPrisoners";
+import Layout from '@src/HOC/Layout/Layout';
+import AddBlock from '@src/Pages/Block/AddBlock';
+import ViewBlock from '@src/Pages/Block/ViewBlock';
+import AddCell from '@src/Pages/Cell/AddCell';
+import ViewCell from '@src/Pages/Cell/ViewCell';
+import Dashboard from '@src/Pages/Dashboard';
+import AddIncidents from '@src/Pages/Incident/AddIncidents';
+import ViewIncidents from '@src/Pages/Incident/ViewIncidents';
+import AdddMedicalReports from '@src/Pages/MedicalRecords/AddMedicalRecords';
+import ViewMedicalReports from '@src/Pages/MedicalRecords/VIewMedicalRecords';
+import AddPrison from '@src/Pages/Prison/AddPrison';
+import ViewPrison from '@src/Pages/Prison/ViewPrison';
+import AddPrisoners from '@src/Pages/Prisoners/AddPrisoners';
+import ViewPrisoners from '@src/Pages/Prisoners/ViewPrisoners';
+import AddStaff from '@src/Pages/Staff/AddStaff';
+import ViewStaff from '@src/Pages/Staff/ViewStaff';
+import AddVisitor from '@src/Pages/Visitors/AddVisitors';
+import ViewVisitor from '@src/Pages/Visitors/ViewVisitors';
 
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 

@@ -12,7 +12,7 @@ export default defineConfig({
       '@pages': '/src/pages',
       '@axios': '/src/HOC/axios',
       '@UI': '/src/components/UI',
-      '@types': '/src/types',
+      '@hooks': '/src/hooks',
       '@styles': '/src/Styles',
     },
   },

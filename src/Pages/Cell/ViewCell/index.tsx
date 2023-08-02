@@ -47,7 +47,7 @@ const Index = () => {
         axios
           .get('/cell')
           .then((res) => {
-            console.log(res.data.result, 'collective block');
+            console.log(res.data.result, 'collective cell');
             setField(res.data.result);
           })
           .catch((err) => {
@@ -63,7 +63,18 @@ const Index = () => {
   }, []);
 
   const handleDelete = () => {
-    console.log('delete');
+    axios
+      .delete(`/cell/${workingId}`)
+      .then((res) => {
+        console.log(res.data);
+        setShowDelete(false);
+        setTurnOff(true);
+        toast.success('Cell deleted successfully');
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error('Something went wrong');
+      });
   };
 
   const falseCondition = () => {

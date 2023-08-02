@@ -1,242 +1,191 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AiOutlineEye } from 'react-icons/ai';
-import { BsPencilSquare, BsTrash } from 'react-icons/bs';
-import axios from '../../../HOC/axios/axios';
-import ModalDanger from '../../../components/UI/ModalDanger';
-import Table from '../../../components/UI/Table';
-import TableHead from '../../../components/UI/TableHead';
-import Page from '../../../container/Page';
-/* const fields = [
-  {
-    prisonerId: '100',
-    cellId: '1A',
-    name: 'Alex',
-    age: '24',
-    crime: 'Arson',
-    totalSentence: 4,
-    remainingSentence: 1,
-    status: 'pending',
-  },
-  {
-    prisonerId: '100',
-    cellId: '1A',
-    name: 'Alex',
-    age: '24',
-    crime: 'Arson',
-    totalSentence: 4,
-    remainingSentence: 1,
-    status: 'pending',
-  },
-  {
-    prisonerId: '100',
-    cellId: '1A',
-    name: 'Alex',
-    age: '24',
-    crime: 'Arson',
-    totalSentence: 4,
-    remainingSentence: 1,
-    status: 'pending',
-  },
-]; */
 
-/* const old_heading = [
-  'prisoner Id',
-  'cell Id',
-  'name',
-  'age',
-  'Crime',
-  'Total Sentence',
-  'Remaining Sentence',
-  'Status',
-  'Actions',
-]; */
+// axios
+import axios from '@axios/axios';
+
+// UI
+import ModalBox from '@UI/ModalBox';
+import ModalDanger from '@UI/ModalDanger';
+import Spinner from '@UI/Spinner';
+import TableHead from '@UI/TableHead';
+import Table from '@UI/ViewTable';
+
+// components
+import MovePriosner from '@components/pageComponents/Prisoners/MovePrisoner';
+import UpdatePrisoner from '@components/pageComponents/Prisoners/UpdatePrisoners';
+import ViewSinglePrisoner from '@components/pageComponents/Prisoners/ViewSinglePrisoners';
+
+// others
+import Actions from '@UI/Form/Actions';
+import Page from '@src/container/Page';
+import { data } from '@src/types/Prisoners';
+import { toast } from 'react-hot-toast';
 
 const heading = [
-  'name',
-  'cell',
-  'age',
-  'crime',
-  'total sentence',
-  'remaining sentence',
-  'status',
-  'actions',
+  'Image',
+  'Name',
+  'Cell',
+  'Address',
+  'Contact',
+  'Action',
+  'Move',
 ];
-// TODO change the prisoners so that it shows prisoners cell, block and also the prison...
-
-type Cell = {
-  id: string;
-  cellName: string;
-  capacity: number;
-  currentOccupancy: number;
-};
-
-type fields = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  age: number;
-  address: string;
-  contactNumber: number;
-  crime: string;
-  dateOfAdmission: string; // You might want to use a Date type instead of string
-  dateOfRelease: string;
-  image: string;
-  cell: Cell;
-  latestVisit: string;
-};
-
-// Example data
-/* const exampleData: fields = {
-  id: 'fcafe6a1-212c-4faa-af1f-052d639b8cc1',
-  firstName: 'Adarsh',
-  lastName: 'Kunwar',
-  age: 10,
-  address: 'butwal',
-  contactNumber: 200202002,
-  crime: 'aarson',
-  dateOfAdmission: '2023-07-14T13:42:57.359Z',
-  dateOfRelease: '2025-08-10',
-  image: 'Berserk-Wallpaper-Desktop.jpg',
-  cell: {
-    id: 'a24dd055-fc02-4d6f-bf7f-e65a7bc2a240',
-    cellName: 'Cell 1A',
-    capacity: 10,
-    currentOccupancy: 8,
-  },
-  latestVisit: '2023-07-10',
-}; */
 
 const title = 'Prisoners';
 
-const ViewPrisoner: React.FC = () => {
+const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
+  const [showView, setShowView] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
+  const [showMove, setShowMove] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
-  const [fields, setFields] = useState<fields[]>([]);
-  const getData = useCallback(() => {
+  const [field, setField] = useState<data[]>([]);
+  const [workingId, setWorkingId] = useState<string>('');
+
+  const getData = useCallback(async () => {
     try {
-      const timout = setTimeout(() => {
+      const timeOut = setTimeout(() => {
         axios
           .get('/prisoner')
           .then((res) => {
-            console.log(res.data.result);
-            setFields(res.data.result);
+            console.log(res.data.result, 'collective prisoner');
+            setField(res.data.result);
           })
           .catch((err) => {
             console.log(err);
+            toast.error('Something went wrong');
           });
-        return clearTimeout(timout);
+        return () => clearTimeout(timeOut);
       }, 1000);
     } catch (err) {
       console.log(err);
+      toast.error('Something went wrong');
     }
   }, []);
 
-  const handleUpdate = () => {
-    console.log('update');
-  };
-
   const handleDelete = () => {
-    console.log('delete');
-  };
-
-  const handleView = () => {
-    console.log('view');
+    axios
+      .delete(`/prisoner/${workingId}`)
+      .then((res) => {
+        console.log(res.data);
+        toast.success('Deleted Successfully');
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error('Something went wrong');
+      });
   };
 
   const falseCondition = () => {
     setTurnOff(true);
   };
 
-  // useEffect(() => {
-  //   if (fields.length > 0) {
-  //     console.log(todayDate);
-  //     console.log(parseInt(fields[0].dateOfRelease));
-  //   }
-  // }, [fields, todayDate]);
-
   useEffect(() => {
     if (turnOff) {
       getData();
       setShowDelete(false);
-      const timeout = setTimeout(() => {
+      setShowView(false);
+      setShowUpdate(false);
+      const interval = setTimeout(() => {
         setTurnOff(false);
-        return clearTimeout(timeout);
+        return clearTimeout(interval);
       }, 500);
     }
   }, [turnOff, getData]);
 
-  useEffect(() => {
-    if (showDelete) {
-      setTurnOff(false);
-    }
-  }, [showDelete]);
-
-  const modal = (
-    <div
-      className="fixed top-0 left-0 bottom-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
-      onClick={(e) => {
-        e.stopPropagation();
-        setTurnOff(true);
-      }}
-    >
-      {showDelete && (
-        <ModalDanger
-          name={title}
-          falseCondition={falseCondition}
-          onClick={handleDelete}
-        />
-      )}
+  const showSpinner = (
+    <div className="w-full h-screen flex justify-center items-center">
+      <Spinner />
     </div>
+  );
+
+  const moveModal = (
+    <ModalBox failCondition={falseCondition}>
+      <MovePriosner id={workingId} />
+    </ModalBox>
+  );
+  const dangerModal = (
+    <ModalDanger
+      name={title}
+      falseCondition={falseCondition}
+      onClick={handleDelete}
+    />
+  );
+
+  const updateModal = (
+    <ModalBox failCondition={falseCondition}>
+      <UpdatePrisoner id={workingId} />
+    </ModalBox>
+  );
+
+  const viewModal = (
+    <ModalBox failCondition={falseCondition}>
+      <ViewSinglePrisoner id={workingId} />
+    </ModalBox>
   );
 
   return (
     <Page>
       <div>
-        {showDelete ? modal : null}
+        {showDelete ? dangerModal : null}
+        {showView ? viewModal : null}
+        {showUpdate ? updateModal : null}
+        {showMove ? moveModal : null}
+        {(field.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
         <Table heading={heading}>
-          {fields.map((val, i) => {
-            return (
-              <tr
-                key={i}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-              >
-                <td
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+          {field &&
+            field.map((val, i) => {
+              return (
+                <tr
+                  key={i}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
-                  {val.firstName + ' ' + val.lastName}
-                </td>
-
-                <td className="px-6 py-4">
-                  {val.cell ? val.cell.cellName : '-----'}
-                </td>
-                <td className="px-6 py-4">{val.age}</td>
-                <td className="px-6 py-4">{val.crime}</td>
-                <td className="px-6 py-4">
-                  {parseInt(val.dateOfRelease) - parseInt(val.dateOfAdmission)}
-                </td>
-                <td className="px-6 py-4"> this will change now</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <div className="text-lg" onClick={handleView}>
-                      <AiOutlineEye />
+                  <td
+                    scope="row"
+                    className="px-4 w-8 h-8 overflow-hidden rounded-full font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    <div className="w-12 h-12">
+                      <img
+                        src={`http://localhost:8080/public/${val.image}`}
+                        alt={val.firstName + val.lastName}
+                        className="w-full h-full object-cover rounded-full"
+                      />
                     </div>
-                    <div onClick={handleUpdate}>
-                      <BsPencilSquare />
-                    </div>
-                    <div onClick={() => setShowDelete(true)}>
-                      <BsTrash />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
+                  </td>
+                  <td className="px-6 py-4">
+                    {val.firstName + ' ' + val.lastName}
+                  </td>
+                  <td className="px-6 py-4">{val.cell.name}</td>
+                  <td className="px-6 py-4">{val.address}</td>
+                  <td className="px-6 py-4">{val.contactNumber}</td>
+                  <td className="px-6 py-4">
+                    <Actions
+                      deleteButton={() => setShowDelete(true)}
+                      id={val.id}
+                      setWorkingId={setWorkingId}
+                      updateButton={() => setShowUpdate(true)}
+                      viewButton={() => setShowView(true)}
+                    />
+                  </td>
+                  <td className="px-6 py-4">
+                    <button
+                      className="bg-secondary px-5 py-1"
+                      onClick={() => {
+                        setWorkingId(val.id);
+                        setShowMove(true);
+                      }}
+                    >
+                      Move
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
         </Table>
       </div>
     </Page>
   );
 };
 
-export default ViewPrisoner;
+export default Index;
