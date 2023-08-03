@@ -12,9 +12,10 @@ import * as React from 'react';
 type props = {
   heading: string[];
   children: string | JSX.Element | JSX.Element[];
+  setrevesred: () => void;
 };
 
-const Index: React.FC<props> = ({ heading, children }) => {
+const Index: React.FC<props> = ({ heading, children, setrevesred }) => {
   return (
     <div className="rounded-xl overflow-hidden">
       <Box sx={{ width: '100%' }}>
@@ -29,7 +30,14 @@ const Index: React.FC<props> = ({ heading, children }) => {
                 <TableRow>
                   {heading.map((headCell, index) => (
                     <TableCell key={index} align="left">
-                      <TableSortLabel>{headCell}</TableSortLabel>
+                      <TableSortLabel
+                        onClick={() => {
+                          alert('Ds');
+                          setrevesred();
+                        }}
+                      >
+                        {headCell}
+                      </TableSortLabel>
                     </TableCell>
                   ))}
                 </TableRow>

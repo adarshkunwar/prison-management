@@ -70,8 +70,10 @@ const Index: React.FC<Props> = ({ id }) => {
   }, [getBlock]);
 
   useEffect(() => {
-    getCell();
-  }, [getCell]);
+    if (chosenBlock) {
+      getCell();
+    }
+  }, [getCell, chosenBlock]);
   return (
     <div>
       <div>
@@ -80,7 +82,6 @@ const Index: React.FC<Props> = ({ id }) => {
           id="prison"
           onChange={(e) => {
             setChosenPrison(e.target.value);
-            getBlock();
           }}
         >
           <option value="">Choose Prison</option>
@@ -97,7 +98,6 @@ const Index: React.FC<Props> = ({ id }) => {
           id="block"
           onChange={(e) => {
             setChosenBlock(e.target.value);
-            getCell();
           }}
         >
           <option value="">Choose Block</option>

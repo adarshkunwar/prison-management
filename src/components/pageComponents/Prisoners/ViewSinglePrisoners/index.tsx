@@ -59,7 +59,7 @@ const Index: React.FC<ViewSinglePrisonerProps> = ({ id }) => {
                 )}
               </div>
             </div>
-            <div className="text-2xl font-semibold text-accent mt-20">
+            <div className="text-2xl font-semibold text-accent mt-5">
               {singlePrison?.firstName + ' ' + singlePrison?.lastName}
             </div>
             <div className="flex items-baseline gap-5">
@@ -73,8 +73,8 @@ const Index: React.FC<ViewSinglePrisonerProps> = ({ id }) => {
             </div>
           </div>
           {/* TODO: uncomment this after you add visitors */}
-          {/* <div className="text-left">
-            {singlePrison.visitors.length > 0 ? (
+          <div className="text-left">
+            {singlePrison.visitors ? (
               <div>
                 <div>
                   <div className="text-xl font-semibold text-accent">
@@ -85,10 +85,13 @@ const Index: React.FC<ViewSinglePrisonerProps> = ({ id }) => {
                   {singlePrison.visitors.map((val, i) => {
                     return (
                       <tr key={i}>
-                        <td className="pl-2 py-2 border">{val.name}</td>
-                        <td className="pl-2 border">{val.currentOccupancy}</td>
-                        <td className="pl-2 border">{val.capacity}</td>
-                        <td className="pl-2 border">{val.totalCell}</td>
+                        <td className="pl-2 py-2 border">
+                          {val.firstName} {val.lastName}
+                        </td>
+                        <td className="pl-2 border">{val.contactNumber}</td>
+                        <td className="pl-2 border">{val.address}</td>
+                        <td className="pl-2 border">{val.relation}</td>
+                        <td className="pl-2 border">{val.dateOfVisit}</td>
                       </tr>
                     );
                   })}
@@ -99,7 +102,7 @@ const Index: React.FC<ViewSinglePrisonerProps> = ({ id }) => {
                 No Visitors
               </div>
             )}
-          </div> */}
+          </div>
         </div>
       ) : (
         <div>Some Error Ocuured, the prison could not be found</div>

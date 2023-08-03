@@ -1,12 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AiOutlineEye } from 'react-icons/ai';
-import { BsPencilSquare, BsTrash } from 'react-icons/bs';
-import axios from '../../../HOC/axios/axios';
-import ModalDanger from '../../../components/UI/ModalDanger';
-import Spinner from '../../../components/UI/Spinner';
-import Table from '../../../components/UI/Table';
-import TableHead from '../../../components/UI/TableHead';
-import Page from '../../../container/Page';
+
+// axios
+import axios from '@axios/axios';
+
+// UI
+import ModalBox from '@UI/ModalBox';
+import ModalDanger from '@UI/ModalDanger';
+import Spinner from '@UI/Spinner';
+import TableHead from '@UI/TableHead';
+import Table from '@UI/ViewTable';
+
+// components
+import ViewSingleCell from '@components/pageComponents/Cell/ViewSingleCell';
+import UpdateCell from '@components/pageComponents/Cell/updateCell';
+
+// others
+import Actions from '@UI/Form/Actions';
+import Page from '@src/container/Page';
+import { toast } from 'react-hot-toast';
 
 type fields = {
   firstName: string;
@@ -38,6 +49,9 @@ const title = 'Visitors';
 const Index = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
+  const [workingId, setWorkingId] = useState<string>('');
+  const [showView, setShowView] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
   const [fields, setFields] = useState<fields[]>([]);
 
   const getData = useCallback(() => {
@@ -139,17 +153,13 @@ const Index = () => {
                   <td className="px-6 py-4">{val.relation}</td>
                   <td className="px-6 py-4">{val.dateOfVisit}</td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <div className="text-lg" onClick={handleView}>
-                        <AiOutlineEye />
-                      </div>
-                      <div onClick={handleUpdate}>
-                        <BsPencilSquare />
-                      </div>
-                      <div onClick={() => setShowDelete(true)}>
-                        <BsTrash />
-                      </div>
-                    </div>
+                    <Actions
+                      deleteButton={() => setShowDelete(true)}
+                      id={val.id}
+                      setWorkingId={setWorkingId}
+                      updateButton={() => setShowUpdate(true)}
+                      viewButton={() => setShowView(true)}
+                    />
                   </td>
                 </tr>
               );

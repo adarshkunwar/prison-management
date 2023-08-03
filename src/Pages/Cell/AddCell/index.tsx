@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 
 // components
 import FormHead from '@components/UI/FormHead';
@@ -163,7 +163,9 @@ const Index: React.FC = () => {
                       name={field.name}
                       id={field.name}
                       className={styleInput.default}
-                      onChange={(e: any) => setChosenPrison(e.target.value)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setChosenPrison(e.target.value)
+                      }
                     >
                       <option value="">-------</option>
                       {field.options &&

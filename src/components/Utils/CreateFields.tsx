@@ -1,15 +1,15 @@
 import { fields } from '@src/types/Data';
 
-type optionArr = {
-  id: string;
-  name: string;
-}[];
+// type optionArr = {
+//   id: string;
+//   name: string;
+// }[];
 
 export const createField = (
   name: string,
   label: string,
   type: string,
-  options?: optionArr
+  options?: any[]
 ) => {
   const returnable: fields = {
     name: name,

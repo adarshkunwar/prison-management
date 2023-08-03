@@ -58,14 +58,15 @@ export type PrisonerSimple = {
 };
 
 export type VisitorSimple = {
-  id: string;
+  id?: string;
   firstName: string;
   lastName: string;
   age: number;
   address: string;
   contactNumber: string;
-  dateOfVisit: string;
-  prisoner?: PrisonerSimple;
+  relation: string;
+  dateOfVisit?: string;
+  prisoner?: PrisonerSimple | string;
 };
 
 export type StaffSimple = {

@@ -47,7 +47,6 @@ const Index = () => {
         axios
           .get('/cell')
           .then((res) => {
-            console.log(res.data.result, 'collective cell');
             setField(res.data.result);
           })
           .catch((err) => {

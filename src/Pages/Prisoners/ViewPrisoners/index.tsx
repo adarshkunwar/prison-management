@@ -41,6 +41,7 @@ const Index = () => {
   const [turnOff, setTurnOff] = useState(true);
   const [field, setField] = useState<data[]>([]);
   const [workingId, setWorkingId] = useState<string>('');
+  const [revesred, setrevesred] = useState(false);
 
   const getData = useCallback(async () => {
     try {
@@ -49,7 +50,12 @@ const Index = () => {
           .get('/prisoner')
           .then((res) => {
             console.log(res.data.result, 'collective prisoner');
-            setField(res.data.result);
+            if (revesred) {
+              alert('Dd');
+              setField(res.data.result.reverse());
+            } else {
+              setField(res.data.result);
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -61,7 +67,7 @@ const Index = () => {
       console.log(err);
       toast.error('Something went wrong');
     }
-  }, []);
+  }, [revesred]);
 
   const handleDelete = () => {
     axios
@@ -81,7 +87,7 @@ const Index = () => {
   };
 
   useEffect(() => {
-    if (turnOff) {
+    if (turnOff || revesred) {
       getData();
       setShowDelete(false);
       setShowView(false);
@@ -91,7 +97,7 @@ const Index = () => {
         return clearTimeout(interval);
       }, 500);
     }
-  }, [turnOff, getData]);
+  }, [turnOff, getData, revesred]);
 
   const showSpinner = (
     <div className="w-full h-screen flex justify-center items-center">
@@ -133,7 +139,7 @@ const Index = () => {
         {showMove ? moveModal : null}
         {(field.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
-        <Table heading={heading}>
+        <Table heading={heading} setrevesred={() => setrevesred(!revesred)}>
           {field &&
             field.map((val, i) => {
               return (
