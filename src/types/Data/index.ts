@@ -70,16 +70,16 @@ export type VisitorSimple = {
 };
 
 export type StaffSimple = {
-  id: string;
+  id?: string;
   firstName: string;
   lastName: string;
   age: number;
   address: string;
   contactNumber: string;
-  dateOfJoining: string;
+  dateOfJoining?: string;
   salary: number;
   designation: string;
-  prison?: PrisonSimple;
+  prison?: PrisonSimple | string;
 };
 
 export type fields = {

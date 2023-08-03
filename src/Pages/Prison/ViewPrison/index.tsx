@@ -1,4 +1,3 @@
-import getPrison from '@src/hooks/usePrison';
 import { useCallback, useEffect, useState } from 'react';
 // axios
 import axios from '@axios/axios';
@@ -19,17 +18,20 @@ import { viewAllPrison } from '@src/types/Prison/viewPrison';
 import { toast } from 'react-hot-toast';
 
 const Index = () => {
-  const [showDelete, setShowDelete] = useState(false);
-  const [showView, setShowView] = useState(false);
-  const [showUpdate, setShowUpdate] = useState(false);
   const [turnOff, setTurnOff] = useState(true);
+  const [showView, setShowView] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
   const [fields, setFields] = useState<viewAllPrison[]>([]);
   const [workingId, setWorkingId] = useState<string>('');
   const title = 'Prison';
 
   const getData = useCallback(() => {
     try {
-      setFields(getPrison());
+      axios
+        .get('/prison')
+        .then((res) => setFields(res.data.result))
+        .catch(() => toast.error('Could not get Prison'));
     } catch (err) {
       toast.error('Something went wrong');
     }

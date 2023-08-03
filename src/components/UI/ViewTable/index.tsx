@@ -32,7 +32,6 @@ const Index: React.FC<props> = ({ heading, children, setrevesred }) => {
                     <TableCell key={index} align="left">
                       <TableSortLabel
                         onClick={() => {
-                          alert('Ds');
                           setrevesred();
                         }}
                       >
