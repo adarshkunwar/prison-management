@@ -13,6 +13,7 @@ import Table from '@UI/ViewTable';
 // components
 import ViewSingleCell from '@components/pageComponents/Cell/ViewSingleCell';
 import UpdateCell from '@components/pageComponents/Cell/updateCell';
+import { singleCellForCell as heading } from '@src/components/Utils/HeadingLists';
 
 // others
 import Actions from '@UI/Form/Actions';
@@ -29,8 +30,6 @@ type fields = {
   };
 };
 
-const heading = ['Cell Name', 'Block Name', 'Capacity', 'Occupancy', 'Actions'];
-
 const title = 'Cell';
 
 const Index = () => {
@@ -40,6 +39,7 @@ const Index = () => {
   const [turnOff, setTurnOff] = useState(true);
   const [field, setField] = useState<fields[]>([]);
   const [workingId, setWorkingId] = useState<string>('');
+  const [reverse, setReverse] = useState<boolean>(false);
 
   const getData = useCallback(async () => {
     try {
@@ -47,7 +47,8 @@ const Index = () => {
         axios
           .get('/cell')
           .then((res) => {
-            setField(res.data.result);
+            if (!reverse) setField(res.data.result);
+            setField(res.data.result.reverse());
           })
           .catch((err) => {
             console.log(err);
@@ -59,7 +60,7 @@ const Index = () => {
       console.log(err);
       toast.error('Something went wrong');
     }
-  }, []);
+  }, [reverse]);
 
   const handleDelete = () => {
     axios
@@ -92,6 +93,10 @@ const Index = () => {
       }, 500);
     }
   }, [turnOff, getData]);
+
+  useEffect(() => {
+    getData();
+  }, [getData, reverse]);
 
   const showSpinner = (
     <div className="w-full h-screen flex justify-center items-center">
@@ -127,7 +132,10 @@ const Index = () => {
         {showUpdate ? updateModal : null}
         {(field.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
-        <Table heading={heading}>
+        <Table
+          setReversed={() => setReverse((prev) => !prev)}
+          heading={heading}
+        >
           {field &&
             field.map((val, i) => {
               return (
@@ -135,6 +143,7 @@ const Index = () => {
                   key={i}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
+                  <td className="px-6 py-4">{i + 1}</td>
                   <td
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"

@@ -4,7 +4,7 @@ import { styleInput } from '@styles/Form';
 import { toast } from 'react-hot-toast';
 // form components
 import axios from '@axios/axios';
-import { createField } from '@src/components/Utils/CreateFields';
+import { createField } from '@components/Utils/CreateFields';
 import { PrisonerSimple } from '@src/types/Data';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';

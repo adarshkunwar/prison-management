@@ -6,6 +6,7 @@ import ViewCell from '@src/Pages/Cell/ViewCell';
 import Dashboard from '@src/Pages/Dashboard';
 import AddIncidents from '@src/Pages/Incident/AddIncidents';
 import ViewIncidents from '@src/Pages/Incident/ViewIncidents';
+import Login from '@src/Pages/Login';
 import AdddMedicalReports from '@src/Pages/MedicalRecords/AddMedicalRecords';
 import ViewMedicalReports from '@src/Pages/MedicalRecords/VIewMedicalRecords';
 import AddPrison from '@src/Pages/Prison/AddPrison';
@@ -26,6 +27,7 @@ const App = () => {
         <Layout>
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/block" element={<ViewBlock />} />
             <Route path="/new-block" element={<AddBlock />} />
             <Route path="/cell" element={<ViewCell />} />
