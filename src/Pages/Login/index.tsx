@@ -1,65 +1,149 @@
+import axios from '@axios/axios';
 import UserAuthContextApi, {
   UserAuthContext,
 } from '@src/HOC/ContextApi/UserContextApi';
-import React from 'react';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
+const schema = yup.object().shape({
+  userName: yup.string().required('Email is required'),
+  password: yup.string().required('Password is required'),
+});
 
-const Index: React.FC = () => {
+const FormField = [
+  {
+    name: 'userName',
+    type: 'text',
+  },
+  {
+    name: 'password',
+    type: 'password',
+  },
+];
+
+const initialValues = {
+  userName: '',
+  password: '',
+};
+
+const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const postLoginForm = async (val) => {
+    axios
+      .post('/user/login', val)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          localStorage.setItem('token1', res.data.token);
+          console.log(res.data);
+
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error('Something went wrong');
+      });
+  };
+
+  //   const postLoginForm = async (val) => {
+  //     try {
+  //       const res = await post('/adminlogintable/admin/login', val);
+
+  //       console.log(res.data);
+  //       if (res.status === 200) {
+  //         localStorage.setItem('token1', res.data.token);
+  //         console.log(res.data);
+  //         setLogin(true);
+
+  //         const admin_id = res.data.admin_id;
+  //         setLoginData(true);
+  //         console.log(res.data);
+  //         localStorage.setItem('admin_id', admin_id);
+  //         navigate('/', { state: { admin_id } });
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+
+  //       // Handle the error and display toast notification
+  //       if (
+  //         error.response &&
+  //         error.response.data &&
+  //         error.response.data.message
+  //       ) {
+  //         toast.error(error.response.data.message);
+  //       } else {
+  //         toast.error('An unexpected error occurred. Please try again later.');
+  //       }
+  //     }
+  //   };
+
   return (
-    <UserAuthContextApi>
-      <UserAuthContext.Consumer>
-        {({ name, tkn }) => (
-          <div className="w-full h-screen flex justify-center items-center">
-            <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-              <form className="space-y-6" action="#">
-                <h5 className="text-xl font-medium text-gray-900 dark:text-white">
-                  Sign in to our platform
-                </h5>
+    <div className="flex justify-center items-center h-screen bg-gray-400 ">
+      <div className="rounded-lg w-96 p-8 h-96 bg-slate-900   shadow-sm shadow-gray-300">
+        <h2 className="text-4xl font-bold mb-8 text-center text-white">
+          Admin Login
+        </h2>
+        <UserAuthContextApi>
+          <UserAuthContext.Consumer>
+            {(context) => {
+              return (
                 <div>
-                  <label
-                    htmlFor="userName"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  <Formik
+                    initialValues={initialValues}
+                    validationSchema={schema}
+                    onSubmit={(val) => {
+                      console.log(val);
+                      postLoginForm(val);
+                    }}
                   >
-                    UserName
-                  </label>
-                  <input
-                    type="text"
-                    name="userName"
-                    id="userName"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="your User Name"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Your password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    required
-                  />
-                </div>
+                    {({ handleSubmit }) => {
+                      return (
+                        <Form onSubmit={handleSubmit}>
+                          {FormField.map((val, i) => {
+                            return (
+                              <div key={i} className="mb-4">
+                                <label
+                                  htmlFor={val.name}
+                                  className="block font-bold mb-2 text-white"
+                                >
+                                  {val.name}
+                                </label>
+                                <Field
+                                  type={val.type}
+                                  name={val.name}
+                                  placeholder={`Enter your ${val.name}`}
+                                  className="border border-gray-400 p-2 w-full rounded-lg"
+                                />
+                                <ErrorMessage
+                                  name={val.name}
+                                  component={'div'}
+                                  className="text-red-500"
+                                ></ErrorMessage>
+                              </div>
+                            );
+                          })}
 
-                <button
-                  type="submit"
-                  className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Login to your account
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-      </UserAuthContext.Consumer>
-    </UserAuthContextApi>
+                          <button
+                            type="submit"
+                            className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700"
+                          >
+                            Log in
+                          </button>
+                        </Form>
+                      );
+                    }}
+                  </Formik>
+                </div>
+              );
+            }}
+          </UserAuthContext.Consumer>
+        </UserAuthContextApi>
+      </div>
+    </div>
   );
 };
 
-export default Index;
+export default LoginPage;

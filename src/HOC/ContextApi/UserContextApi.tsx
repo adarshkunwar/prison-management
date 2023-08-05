@@ -16,7 +16,7 @@ const UserAuthContextApi = ({ children }: UserAuthContextApiProps) => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token1');
-
+    console.log(storedToken, 'storedToken');
     if (storedToken) {
       setToken(storedToken);
       navigate('/');

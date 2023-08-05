@@ -27,7 +27,6 @@ const App = () => {
         <Layout>
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/login" element={<Login />} />
             <Route path="/block" element={<ViewBlock />} />
             <Route path="/new-block" element={<AddBlock />} />
             <Route path="/cell" element={<ViewCell />} />
@@ -47,6 +46,7 @@ const App = () => {
             <Route path="/new-staff" element={<AddStaff />} />
             <Route path="/visitors" element={<ViewVisitor />} />
             <Route path="/new-visitors" element={<AddVisitor />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </Layout>
       </Router>
