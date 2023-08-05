@@ -8,8 +8,8 @@ import Spinner from '@UI/Spinner';
 import TableHead from '@UI/TableHead';
 import Table from '@UI/ViewTable';
 // components
+import { singlePrisonForSinglePrison as allPrisonHeading } from '@components/Utils/HeadingLists';
 import UpdatePrison from '@components/pageComponents/Prison/UpdatePrison';
-import { heading } from '@components/pageComponents/Prison/ViewPrison/heading';
 import ViewSinglePrison from '@components/pageComponents/Prison/ViewSinglePrison/Index';
 // others
 import Actions from '@src/components/UI/Form/Actions';
@@ -24,40 +24,39 @@ const Index = () => {
   const [showUpdate, setShowUpdate] = useState(false);
   const [fields, setFields] = useState<viewAllPrison[]>([]);
   const [workingId, setWorkingId] = useState<string>('');
+  const [reverse, setReverse] = useState<boolean>(false);
+  // const [searchText, setSearchText] = useState<string>('');
   const title = 'Prison';
+
+  const falseCondition = () => setTurnOff(true);
 
   const getData = useCallback(() => {
     try {
       axios
         .get('/prison')
-        .then((res) => setFields(res.data.result))
-        .catch(() => toast.error('Could not get Prison'));
+        .then((res) => {
+          if (!reverse) setFields(res.data.result);
+          else setFields(res.data.result.reverse());
+        })
+        .catch((err) => toast.error(err.message || 'Something went wrong'));
     } catch (err) {
       toast.error('Something went wrong');
     }
-  }, []);
+  }, [reverse]);
 
   const handleDelete = () => {
     try {
       axios
         .delete(`/prison/${workingId}`)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           setTurnOff(true);
-          setShowDelete(false);
           toast.success('Prison is deleted');
         })
-        .catch((err) => {
-          console.log(err);
-          toast.error('Something went wrong');
-        });
+        .catch((err) => toast.error(err.message || 'Something went wrong'));
     } catch (err) {
-      console.log(err);
       toast.error('Something went wrong');
     }
   };
-
-  const falseCondition = () => setTurnOff(true);
 
   useEffect(() => {
     if (turnOff) {
@@ -65,13 +64,16 @@ const Index = () => {
       setShowDelete(false);
       setShowView(false);
       setShowUpdate(false);
-      console.log();
       const timeOut = setTimeout(() => {
         setTurnOff(false);
         return clearTimeout(timeOut);
       }, 500);
     }
-  }, [turnOff, getData]);
+  }, [turnOff, getData, reverse]);
+
+  useEffect(() => {
+    getData();
+  }, [reverse, getData]);
 
   const dangerModal = (
     <ModalDanger
@@ -108,7 +110,10 @@ const Index = () => {
         {(fields.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
 
-        <Table heading={heading}>
+        <Table
+          setReversed={() => setReverse((prev) => !prev)}
+          heading={allPrisonHeading}
+        >
           {fields.map((val, i) => {
             return (
               <tr

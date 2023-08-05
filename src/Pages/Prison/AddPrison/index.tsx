@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // components
 import FormHead from '@components/UI/FormHead';
 import Page from '@src/container/Page';
 import { styleInput } from '@styles/Form';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 // form components
 import axios from '@axios/axios';
@@ -22,30 +24,24 @@ const fields = [
     label: 'Address',
     type: 'text',
   },
-  {
-    name: 'description',
-    label: 'Description',
-    type: 'text',
-  },
 ];
 
 const initialValues = {
   name: '',
   address: '',
-  description: '',
 };
 
 const schema = Yup.object().shape({
   name: Yup.string().required('Required'),
   address: Yup.string().required('Required'),
-  description: Yup.string().required('Required'),
 });
 
 const NewPrisoners: React.FC = () => {
+  const [description, setDescription] = useState('');
   const handleSubmit = (data: object) => {
     try {
       axios
-        .post('/prison', data)
+        .post('/prison', { ...data, description: description })
         .then((res) => {
           console.log(res);
           toast.success('Prison is added');
@@ -99,6 +95,21 @@ const NewPrisoners: React.FC = () => {
                 </div>
               </div>
             ))}
+            <div>
+              <div>
+                <label htmlFor="description" className={styleInput.label}>
+                  Description
+                </label>
+              </div>
+              <div className="bg-white h-96">
+                <ReactQuill
+                  theme="snow"
+                  value={description}
+                  onChange={setDescription}
+                  className="h-full border-none "
+                />
+              </div>
+            </div>
 
             <div className="w-full flex justify-start">
               <button

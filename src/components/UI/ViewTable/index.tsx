@@ -10,12 +10,12 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import * as React from 'react';
 
 type props = {
-  heading: string[];
+  heading: { name: string; isSortable: boolean }[];
   children: string | JSX.Element | JSX.Element[];
-  setrevesred: () => void;
+  setReversed: () => void;
 };
 
-const Index: React.FC<props> = ({ heading, children, setrevesred }) => {
+const Index: React.FC<props> = ({ heading, children, setReversed }) => {
   return (
     <div className="rounded-xl overflow-hidden">
       <Box sx={{ width: '100%' }}>
@@ -32,10 +32,10 @@ const Index: React.FC<props> = ({ heading, children, setrevesred }) => {
                     <TableCell key={index} align="left">
                       <TableSortLabel
                         onClick={() => {
-                          setrevesred();
+                          if (headCell.isSortable) setReversed();
                         }}
                       >
-                        {headCell}
+                        {headCell.name}
                       </TableSortLabel>
                     </TableCell>
                   ))}

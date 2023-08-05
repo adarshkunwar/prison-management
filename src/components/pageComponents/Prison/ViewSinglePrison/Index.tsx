@@ -64,7 +64,10 @@ const Index: React.FC<ViewSinglePrisonProps> = ({ id }) => {
             </div>
             <div className="flex items-baseline gap-5">
               {/* <div className="text-sm text-gray-500">Description:</div> */}
-              <div className="text-md">{singlePrison?.description}</div>
+              <div
+                className="text-md"
+                dangerouslySetInnerHTML={{ __html: singlePrison?.description }}
+              />
             </div>
             {/* <div>Address : {singlePrison.address}</div>
             <div>capacity: {singlePrison.capacity}</div>

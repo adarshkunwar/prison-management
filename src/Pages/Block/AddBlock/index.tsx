@@ -20,7 +20,9 @@ const NewBlock: React.FC = () => {
 
   const getPrison = async () => {
     try {
-      setPrisonArr(prisonAll());
+      axios.get('/prison').then((res) => {
+        setPrisonArr(res.data.result);
+      });
     } catch (err) {
       toast.error('Something went wrong');
     }

@@ -9,6 +9,7 @@ import ModalDanger from '@UI/ModalDanger';
 import Spinner from '@UI/Spinner';
 import TableHead from '@UI/TableHead';
 import Table from '@UI/ViewTable';
+import { singleBlockForBlock as heading } from '@src/components/Utils/HeadingLists';
 
 // components
 import UpdateBlock from '@components/pageComponents/Block/UpdateBlock';
@@ -29,14 +30,6 @@ type field = {
   };
 };
 
-const heading = [
-  'Block Name',
-  'Prison Name',
-  'Capacity',
-  'Current Occupancy',
-  'Actions',
-];
-
 const title = 'Blocks';
 
 const Index = () => {
@@ -46,6 +39,7 @@ const Index = () => {
   const [turnOff, setTurnOff] = useState(true);
   const [field, setField] = useState<field[]>([]);
   const [workingId, setWorkingId] = useState<string>('');
+  const [reverse, setReverse] = useState<boolean>(false);
 
   const getData = useCallback(async () => {
     try {
@@ -53,20 +47,17 @@ const Index = () => {
         axios
           .get('/block')
           .then((res) => {
-            console.log(res.data.result, 'collective block');
-            setField(res.data.result);
+            if (!reverse) setField(res.data.result);
+            setField(res.data.result.reverse());
           })
-          .catch((err) => {
-            console.log(err);
-            toast.error('Something went wrong');
-          });
+          .catch((err) => toast.error(err.message));
         return () => clearTimeout(timeOut);
       }, 1000);
     } catch (err) {
       console.log(err);
       toast.error('Something went wrong');
     }
-  }, []);
+  }, [reverse]);
 
   const handleDelete = () => {
     try {
@@ -103,6 +94,10 @@ const Index = () => {
       }, 500);
     }
   }, [turnOff, getData]);
+
+  useEffect(() => {
+    getData();
+  }, [reverse, getData]);
 
   const dangerModal = (
     <div
@@ -168,7 +163,10 @@ const Index = () => {
         {showUpdate ? updateModal : null}
         {(field.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
-        <Table heading={heading}>
+        <Table
+          setReversed={() => setReverse((prev) => !prev)}
+          heading={heading}
+        >
           {field &&
             field.map((item) => (
               <tr

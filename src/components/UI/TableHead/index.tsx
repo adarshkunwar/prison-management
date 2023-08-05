@@ -1,56 +1,57 @@
 import { useState } from 'react';
-import { BsChevronDown } from 'react-icons/bs';
+// import { BsChevronDown } from 'react-icons/bs';
 
-type OptionProps = {
-  icon: null | JSX.Element | string;
-  label: string;
-};
+// type OptionProps = {
+//   icon: null | JSX.Element | string;
+//   label: string;
+// };
 
 type props = {
   title?: string;
+  selectedText?: string;
 };
 
-const options: OptionProps[] = [
-  {
-    icon: null,
-    label: 'Today',
-  },
-  {
-    icon: null,
-    label: 'Yesterday',
-  },
-  {
-    icon: null,
-    label: 'Last Week',
-  },
-  {
-    icon: null,
-    label: 'Last Month',
-  },
-  {
-    icon: null,
-    label: 'Last Year',
-  },
-  {
-    icon: null,
-    label: 'All time',
-  },
-];
+// const options: OptionProps[] = [
+//   {
+//     icon: null,
+//     label: 'Today',
+//   },
+//   {
+//     icon: null,
+//     label: 'Yesterday',
+//   },
+//   {
+//     icon: null,
+//     label: 'Last Week',
+//   },
+//   {
+//     icon: null,
+//     label: 'Last Month',
+//   },
+//   {
+//     icon: null,
+//     label: 'Last Year',
+//   },
+//   {
+//     icon: null,
+//     label: 'All time',
+//   },
+// ];
 
-const Index = ({ title }: props) => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(options[2]);
+const Index = ({ title, selectedText }: props) => {
+  // const [showDropdown, setShowDropdown] = useState(false);
+  // const [selectedOption, setSelectedOption] = useState(options[2]);
 
-  const handleOptionChange = (option: OptionProps) => {
-    setSelectedOption(option);
-    setShowDropdown(false);
-  };
+  // const handleOptionChange = (option: OptionProps) => {
+  //   setSelectedOption(option);
+  //   setShowDropdown(false);
+  // };
 
   return (
     <div>
       <h1 className="text-3xl py-5 font-semibold">{title}</h1>
-      <div className="flex items-center justify-between pb-4">
-        <div className="relative">
+      <div className="flex items-center justify-end pb-4">
+        {/* <div className="relative">
           <button
             id="dropdownRadioButton"
             data-dropdown-toggle="dropdownRadio"
@@ -118,8 +119,8 @@ const Index = ({ title }: props) => {
               </ul>
             </div>
           )}
-        </div>
-        <label htmlFor="table-search" className="sr-only">
+        </div> */}
+        {/* <label htmlFor="table-search" className="sr-only">
           Search
         </label>
         <div className="relative">
@@ -143,8 +144,9 @@ const Index = ({ title }: props) => {
             id="table-search"
             className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search for items"
+            onChange={(e) => console.log(e.target.value)}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
