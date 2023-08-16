@@ -1,11 +1,12 @@
+import { singleStaffForStaff as heading } from '@src/components/Utils/HeadingLists';
 import { useCallback, useEffect, useState } from 'react';
 import { AiOutlineEye } from 'react-icons/ai';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
 import axios from '../../../HOC/axios/axios';
 import ModalDanger from '../../../components/UI/ModalDanger';
 import Spinner from '../../../components/UI/Spinner';
-import Table from '../../../components/UI/Table';
 import TableHead from '../../../components/UI/TableHead';
+import Table from '../../../components/UI/ViewTable';
 import Page from '../../../container/Page';
 
 type fields = {
@@ -22,18 +23,6 @@ type fields = {
     name: string;
   };
 };
-
-const heading = [
-  'Name',
-  'Prison Name',
-  'Position',
-  'Salary',
-  'Joining Date',
-  'Address',
-  'Age',
-  'Contact Number',
-  'Action',
-];
 
 const title = 'Staff';
 
@@ -76,6 +65,7 @@ const Index = () => {
   const falseCondition = () => {
     setTurnOff(true);
   };
+
 
   useEffect(() => {
     if (turnOff) {
@@ -126,6 +116,7 @@ const Index = () => {
                   key={i}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
+                  <td className="px-6 py-4">{i + 1}</td>
                   <td
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"

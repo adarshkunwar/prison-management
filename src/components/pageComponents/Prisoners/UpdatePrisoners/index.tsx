@@ -24,8 +24,18 @@ const field = [
 ];
 
 const schema = Yup.object().shape({
-  firstName: Yup.string().required('Required'),
-  lastName: Yup.string().required('Required'),
+  firstName: Yup.string()
+    .required('Required')
+    .matches(
+      /^[a-zA-Z]+[a-zA-Z\s]$/,
+      'Name can only contain letters and whitespace'
+    ),
+  lastName: Yup.string()
+    .required('Required')
+    .matches(
+      /^[a-zA-Z]+[a-zA-Z\s]$/,
+      'Name can only contain letters and whitespace'
+    ),
   age: Yup.number().required('Required'),
   address: Yup.string().required('Required'),
   contactNumber: Yup.number().required('Required'),

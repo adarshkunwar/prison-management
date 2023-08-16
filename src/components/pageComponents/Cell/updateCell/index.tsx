@@ -26,7 +26,12 @@ const field = [
 ];
 
 const schema = Yup.object().shape({
-  name: Yup.string().required('Required'),
+  name: Yup.string()
+    .required('Required')
+    .matches(
+      /^[a-zA-Z]+[a-zA-Z\s]*?[^0-9]$/,
+      'Name can only contain letters, numbers, and whitespace'
+    ),
   capacity: Yup.number().required('Required'),
 });
 

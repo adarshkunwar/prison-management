@@ -37,15 +37,15 @@ const NewPrison: React.FC = () => {
         .then((res) => {
           console.log(res.data.result);
           setPrisonArr(res.data.result);
-          toast.success('Prison are loaded');
+          // toast.success('Prison are loaded');
         })
         .catch((err) => {
           console.log(err);
-          toast.error('Something went wrong');
+          // toast.error('Something went wrong');
         });
     } catch (err) {
       console.log(err);
-      toast.error('Something went wrong');
+      // toast.error('Something went wrong');
     }
   }, []);
 
@@ -56,15 +56,15 @@ const NewPrison: React.FC = () => {
         .then((res) => {
           console.log(res.data.result.block);
           setBlockArr(res.data.result.blocks);
-          toast.success('Blocks are loaded');
+          // toast.success('Blocks are loaded');
         })
         .catch((err) => {
           console.log(err);
-          toast.error('Could not fetch erro');
+          // toast.error('Could not fetch erro');
         });
     } catch (err) {
       console.log(err);
-      toast.error('could not fetch blocks');
+      // toast.error('could not fetch blocks');
     }
   }, [chosenPrison]);
 
@@ -75,15 +75,15 @@ const NewPrison: React.FC = () => {
         .then((res) => {
           console.log(res.data.result.cells);
           setCellArr(res.data.result.cells);
-          toast.success('Cells are loaded');
+          // toast.success('Cells are loaded');
         })
         .catch((err) => {
           console.log(err);
-          toast.error('Could not fetch erro');
+          // toast.error('Could not fetch erro');
         });
     } catch (err) {
       console.log(err);
-      toast.error('could not fetch cells');
+      // toast.error('could not fetch cells');
     }
   }, [chosenBlock]);
 
@@ -172,7 +172,10 @@ const NewPrison: React.FC = () => {
         })
         .catch((err) => {
           console.log(err);
-          toast.error('Something went wrong');
+          if (err.response) {
+            toast.error(err.response.data.message);
+          }
+          // toast.error('Something went wrong');
         });
     } catch (err) {
       console.log(err);

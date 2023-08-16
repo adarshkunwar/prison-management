@@ -12,7 +12,7 @@ import * as React from 'react';
 type props = {
   heading: { name: string; isSortable: boolean }[];
   children: string | JSX.Element | JSX.Element[];
-  setReversed: () => void;
+  setReversed?: () => void;
 };
 
 const Index: React.FC<props> = ({ heading, children, setReversed }) => {
@@ -32,7 +32,9 @@ const Index: React.FC<props> = ({ heading, children, setReversed }) => {
                     <TableCell key={index} align="left">
                       <TableSortLabel
                         onClick={() => {
-                          if (headCell.isSortable) setReversed();
+                          if (headCell.isSortable) {
+                            if (setReversed) setReversed();
+                          }
                         }}
                       >
                         {headCell.name}

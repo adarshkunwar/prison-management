@@ -27,16 +27,19 @@ const initialValues = {
   password: '',
 };
 
+type FormValues = typeof initialValues;
+
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  const postLoginForm = async (val) => {
+  const postLoginForm = async (val: FormValues) => {
     axios
       .post('/user/login', val)
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
           localStorage.setItem('token1', res.data.token);
+          localStorage.setItem('user', res.data.userName.userName);
           console.log(res.data);
 
           navigate('/');
@@ -48,47 +51,15 @@ const LoginPage = () => {
       });
   };
 
-  //   const postLoginForm = async (val) => {
-  //     try {
-  //       const res = await post('/adminlogintable/admin/login', val);
-
-  //       console.log(res.data);
-  //       if (res.status === 200) {
-  //         localStorage.setItem('token1', res.data.token);
-  //         console.log(res.data);
-  //         setLogin(true);
-
-  //         const admin_id = res.data.admin_id;
-  //         setLoginData(true);
-  //         console.log(res.data);
-  //         localStorage.setItem('admin_id', admin_id);
-  //         navigate('/', { state: { admin_id } });
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-
-  //       // Handle the error and display toast notification
-  //       if (
-  //         error.response &&
-  //         error.response.data &&
-  //         error.response.data.message
-  //       ) {
-  //         toast.error(error.response.data.message);
-  //       } else {
-  //         toast.error('An unexpected error occurred. Please try again later.');
-  //       }
-  //     }
-  //   };
-
   return (
     <div className="flex justify-center items-center h-screen bg-gray-400 ">
-      <div className="rounded-lg w-96 p-8 h-96 bg-slate-900   shadow-sm shadow-gray-300">
-        <h2 className="text-4xl font-bold mb-8 text-center text-white">
+      <div className="rounded-lg w-96 p-8 h-96 bg-white  shadow-sm shadow-gray-300">
+        <h2 className="text-4xl font-bold mb-8 text-center text-black">
           Admin Login
         </h2>
         <UserAuthContextApi>
           <UserAuthContext.Consumer>
-            {(context) => {
+            {({ token }) => {
               return (
                 <div>
                   <Formik
@@ -96,6 +67,7 @@ const LoginPage = () => {
                     validationSchema={schema}
                     onSubmit={(val) => {
                       console.log(val);
+                      console.log(token);
                       postLoginForm(val);
                     }}
                   >
@@ -107,7 +79,7 @@ const LoginPage = () => {
                               <div key={i} className="mb-4">
                                 <label
                                   htmlFor={val.name}
-                                  className="block font-bold mb-2 text-white"
+                                  className="block font-bold mb-2 text-black"
                                 >
                                   {val.name}
                                 </label>
@@ -128,7 +100,7 @@ const LoginPage = () => {
 
                           <button
                             type="submit"
-                            className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700"
+                            className="bg-blue-500 text-black font-bold py-2 px-4 rounded-lg hover:bg-blue-700"
                           >
                             Log in
                           </button>

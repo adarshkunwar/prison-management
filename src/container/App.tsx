@@ -1,3 +1,4 @@
+import UserAuthContextApi from '@src/HOC/ContextApi/UserContextApi';
 import Layout from '@src/HOC/Layout/Layout';
 import AddBlock from '@src/Pages/Block/AddBlock';
 import ViewBlock from '@src/Pages/Block/ViewBlock';
@@ -24,31 +25,34 @@ const App = () => {
   return (
     <div className="">
       <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/block" element={<ViewBlock />} />
-            <Route path="/new-block" element={<AddBlock />} />
-            <Route path="/cell" element={<ViewCell />} />
-            <Route path="/new-cell" element={<AddCell />} />
-            <Route path="/prisoner" element={<ViewPrisoners />} />
-            <Route path="/new-prisoner" element={<AddPrisoners />} />
-            <Route path="/incidents" element={<ViewIncidents />} />
-            <Route path="/new-incidents" element={<AddIncidents />} />
-            <Route path="/medicalReports" element={<ViewMedicalReports />} />
-            <Route
-              path="/new-medicalReports"
-              element={<AdddMedicalReports />}
-            />
-            <Route path="/prison" element={<ViewPrison />} />
-            <Route path="/new-prison" element={<AddPrison />} />
-            <Route path="/staff" element={<ViewStaff />} />
-            <Route path="/new-staff" element={<AddStaff />} />
-            <Route path="/visitors" element={<ViewVisitor />} />
-            <Route path="/new-visitors" element={<AddVisitor />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </Layout>
+        <UserAuthContextApi>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/block" element={<ViewBlock />} />
+              <Route path="/new-block" element={<AddBlock />} />
+              <Route path="/cell" element={<ViewCell />} />
+              <Route path="/new-cell" element={<AddCell />} />
+              <Route path="/prisoner" element={<ViewPrisoners />} />
+              <Route path="/new-prisoner" element={<AddPrisoners />} />
+              <Route path="/incidents" element={<ViewIncidents />} />
+              <Route path="/new-incidents" element={<AddIncidents />} />
+              <Route path="/medicalReports" element={<ViewMedicalReports />} />
+              <Route
+                path="/new-medicalReports"
+                element={<AdddMedicalReports />}
+              />
+              <Route path="/prison" element={<ViewPrison />} />
+              <Route path="/new-prison" element={<AddPrison />} />
+              <Route path="/staff" element={<ViewStaff />} />
+              <Route path="/new-staff" element={<AddStaff />} />
+              <Route path="/visitors" element={<ViewVisitor />} />
+              <Route path="/new-visitors" element={<AddVisitor />} />
+              <Route path="/login" element={<Login />} />
+              {/* <Route path="*" element={<h1>404 Not Found</h1>} /> */}
+            </Routes>
+          </Layout>
+        </UserAuthContextApi>
       </Router>
     </div>
   );

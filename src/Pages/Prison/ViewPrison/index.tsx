@@ -64,7 +64,7 @@ const Index = () => {
       setShowDelete(false);
       setShowView(false);
       setShowUpdate(false);
-      const timeOut = setTimeout(() => {
+      const timeOut: NodeJS.Timeout = setTimeout(() => {
         setTurnOff(false);
         return clearTimeout(timeOut);
       }, 500);

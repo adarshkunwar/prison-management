@@ -79,7 +79,18 @@ const SideBar = () => {
               ))}
             </ul>
           </div>
-          <div>User</div>
+          <div className="group">
+            <div>Admin</div>
+            <button
+              className="hidden group-hover:block"
+              onClick={() => {
+                localStorage.removeItem('token1');
+                window.location.reload();
+              }}
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </aside>
     </div>

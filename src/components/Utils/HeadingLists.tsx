@@ -6,7 +6,7 @@ export const singlePrisonForSinglePrison = [
   creatingHeading('SN', false),
   creatingHeading('Prison Name', false),
   creatingHeading('Location', false),
-  creatingHeading('Capacity', false),
+  creatingHeading('Capacity', true),
   creatingHeading('Occupancy', false),
   creatingHeading('Actions', false),
 ];
@@ -52,5 +52,18 @@ export const singleVisitorForVisitor = [
   creatingHeading('Contact', false),
   creatingHeading('Relation', false),
   creatingHeading('Date Of Visit', false),
+  creatingHeading('Action', false),
+];
+
+export const singleStaffForStaff = [
+  creatingHeading('SN', false),
+  creatingHeading('Name', false),
+  creatingHeading('Prison Name', false),
+  creatingHeading('Position', false),
+  creatingHeading('Salary', false),
+  creatingHeading('Joining Date', false),
+  creatingHeading('Address', false),
+  creatingHeading('Age', false),
+  creatingHeading('Contact Number', false),
   creatingHeading('Action', false),
 ];

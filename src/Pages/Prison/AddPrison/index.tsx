@@ -101,12 +101,12 @@ const NewPrisoners: React.FC = () => {
                   Description
                 </label>
               </div>
-              <div className="bg-white h-96">
+              <div className=" h-96  relative overflow-clip">
                 <ReactQuill
                   theme="snow"
                   value={description}
                   onChange={setDescription}
-                  className="h-full border-none "
+                  className="h-96 bg-white  border-0"
                 />
               </div>
             </div>

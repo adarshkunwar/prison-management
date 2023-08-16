@@ -11,8 +11,7 @@ import TableHead from '@UI/TableHead';
 import Table from '@UI/ViewTable';
 
 // components
-import ViewSingleCell from '@components/pageComponents/Cell/ViewSingleCell';
-import UpdateCell from '@components/pageComponents/Cell/updateCell';
+import { singleVisitorForVisitor as heading } from '@src/components/Utils/HeadingLists';
 
 // others
 import Actions from '@UI/Form/Actions';
@@ -32,17 +31,6 @@ type fields = {
     lastName: string;
   };
 };
-
-const heading = [
-  'Name',
-  'Prisoner Name',
-  'Age',
-  'Address',
-  'Contact Number',
-  'Relation',
-  'Date of Visit',
-  'Action',
-];
 
 const title = 'Visitors';
 
@@ -138,6 +126,7 @@ const Index = () => {
                   key={i}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
+                  <td className="px-6 py-4">{i + 1}</td>
                   <td
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"

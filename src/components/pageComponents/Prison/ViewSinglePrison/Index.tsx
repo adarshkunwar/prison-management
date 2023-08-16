@@ -10,12 +10,27 @@ const Index: React.FC<ViewSinglePrisonProps> = ({ id }) => {
   const [singlePrison, setSinglePrison] = useState<ViewSinglePrison>();
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
-  const Block = ['Block Name', 'Current Occupancy', 'Capacity', 'Total Cell'];
-  const staff = ['name', 'designation', 'contact', 'salary', 'address'];
+  const creatingHeading = (name: string) => {
+    return { name, isSortable: false };
+  };
+
+  const Block = [
+    creatingHeading('Block Name'),
+    creatingHeading('Current Occupancy'),
+    creatingHeading('Capacity'),
+    creatingHeading('Total Cell'),
+  ];
+  const staff = [
+    creatingHeading('Name'),
+    creatingHeading('Designation'),
+    creatingHeading('Contact Number'),
+    creatingHeading('Salary'),
+    creatingHeading('Address'),
+  ];
 
   const getData = useCallback(() => {
     setShowSpinner(true);
-    const timeout = setTimeout(() => {
+    const timeout: NodeJS.Timeout = setTimeout(() => {
       try {
         axios
           .get(`/prison/${id}`)

@@ -13,11 +13,19 @@ const Index: React.FC<viewSingleBlockProps> = ({ id }) => {
   const [singlePrison, setSinglePrison] = useState<viewSingleBlock>();
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
-  const cell = ['name', 'capacity', 'currentOccupancy'];
+  const creatingHeading = (name: string) => {
+    return { name, isSortable: false };
+  };
+
+  const cell = [
+    creatingHeading('Name'),
+    creatingHeading('Current Occupancy'),
+    creatingHeading('Capacity'),
+  ];
 
   const getData = useCallback(() => {
     setShowSpinner(true);
-    const timeout = setTimeout(() => {
+    const timeout: NodeJS.Timeout = setTimeout(() => {
       try {
         axios
           .get(`/block/${id}`)

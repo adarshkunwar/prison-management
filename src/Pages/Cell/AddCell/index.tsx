@@ -33,7 +33,7 @@ const Index: React.FC = () => {
         .get('/prison')
         .then((res) => {
           setPrisonArr(res.data.result);
-          toast.success('Prison are loaded');
+          // toast.success('Prison are loaded');
         })
         .catch((err) => {
           console.log(err);
@@ -51,7 +51,7 @@ const Index: React.FC = () => {
         .then((res) => {
           console.log(res.data.result);
           setBlockArr(res.data.result.blocks);
-          toast.success('Block are loaded');
+          // toast.success('Block are loaded');
         })
         .catch((err) => {
           console.log(err);
@@ -183,7 +183,9 @@ const Index: React.FC = () => {
                       name={field.name}
                       id={field.name}
                       className={styleInput.default}
-                      onChange={(e: any) => setChosenBlock(e.target.value)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setChosenBlock(e.target.value)
+                      }
                     >
                       <option value="">-------</option>
                       {field.options &&

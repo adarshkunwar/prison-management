@@ -21,7 +21,6 @@ const Index: React.FC<Props> = ({ id }) => {
       .get('/prison')
       .then((res) => {
         setPrisonArr(res.data.result);
-        toast.success('Prison are loaded');
       })
       .catch((err) => {
         toast.error('Prison could not be loaded');
@@ -33,15 +32,8 @@ const Index: React.FC<Props> = ({ id }) => {
     try {
       axios
         .get(`/prison/${chosenPrison}`)
-        .then((res) => {
-          console.log(res.data.result);
-          setBlockArr(res.data.result.blocks);
-          toast.success('Block are loaded');
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.success('Something went wrong');
-        });
+        .then((res) => setBlockArr(res.data.result.blocks))
+        .catch((err) => toast.error(err.message));
     } catch (err) {
       console.log(err);
     }
@@ -50,11 +42,7 @@ const Index: React.FC<Props> = ({ id }) => {
   const getCell = useCallback(() => {
     axios
       .get(`/block/${chosenBlock}`)
-      .then((res) => {
-        setCellArr(res.data.result.cells);
-        console.log(res.data.result);
-        toast.success('Cells are loaded');
-      })
+      .then((res) => setCellArr(res.data.result.cells))
       .catch((err) => {
         toast.error('Cells could not be loaded');
         console.log(err);

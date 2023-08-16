@@ -14,22 +14,13 @@ import Table from '@UI/ViewTable';
 import MovePriosner from '@components/pageComponents/Prisoners/MovePrisoner';
 import UpdatePrisoner from '@components/pageComponents/Prisoners/UpdatePrisoners';
 import ViewSinglePrisoner from '@components/pageComponents/Prisoners/ViewSinglePrisoners';
+import { singlePrisonerForPrisoner as heading } from '@src/components/Utils/HeadingLists';
 
 // others
 import Actions from '@UI/Form/Actions';
 import Page from '@src/container/Page';
 import { data } from '@src/types/Prisoners';
 import { toast } from 'react-hot-toast';
-
-const heading = [
-  'Image',
-  'Name',
-  'Cell',
-  'Address',
-  'Contact',
-  'Action',
-  'Move',
-];
 
 const title = 'Prisoners';
 
@@ -51,7 +42,6 @@ const Index = () => {
           .then((res) => {
             console.log(res.data.result, 'collective prisoner');
             if (revesred) {
-              alert('Dd');
               setField(res.data.result.reverse());
             } else {
               setField(res.data.result);
@@ -83,21 +73,27 @@ const Index = () => {
   };
 
   const falseCondition = () => {
+    console.log('false condition');
     setTurnOff(true);
   };
 
   useEffect(() => {
-    if (turnOff || revesred) {
+    if (turnOff) {
       getData();
       setShowDelete(false);
       setShowView(false);
       setShowUpdate(false);
+      setShowMove(false);
       const interval = setTimeout(() => {
         setTurnOff(false);
         return clearTimeout(interval);
       }, 500);
     }
-  }, [turnOff, getData, revesred]);
+  }, [turnOff, getData]);
+
+  useEffect(() => {
+    getData();
+  }, [revesred, getData]);
 
   const showSpinner = (
     <div className="w-full h-screen flex justify-center items-center">
@@ -139,7 +135,7 @@ const Index = () => {
         {showMove ? moveModal : null}
         {(field.length === 0 || turnOff) && showSpinner}
         <TableHead title={title} />
-        <Table heading={heading} setrevesred={() => setrevesred(!revesred)}>
+        <Table heading={heading} setReversed={() => setrevesred(!revesred)}>
           {field &&
             field.map((val, i) => {
               return (
@@ -147,6 +143,7 @@ const Index = () => {
                   key={i}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
+                  <td className="px-6 py-4">{i + 1}</td>
                   <td
                     scope="row"
                     className="px-4 w-8 h-8 overflow-hidden rounded-full font-medium text-gray-900 whitespace-nowrap dark:text-white"

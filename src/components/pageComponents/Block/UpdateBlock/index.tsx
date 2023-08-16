@@ -15,7 +15,7 @@ type Props = {
 const field = [
   {
     name: 'name',
-    label: 'Prison Name',
+    label: 'Block Name',
     type: 'text',
   },
   {
@@ -26,7 +26,12 @@ const field = [
 ];
 
 const schema = Yup.object().shape({
-  name: Yup.string().required('Required'),
+  name: Yup.string()
+    .required('Required')
+    .matches(
+      /^[a-zA-Z]+[a-zA-Z\s]$/,
+      'Name can only contain letters and whitespace'
+    ),
   capacity: Yup.number().required('Required'),
 });
 
